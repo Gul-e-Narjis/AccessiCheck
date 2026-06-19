@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AccessiCheck</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header>
+    <div class="logo">AccessiCheck</div>
+  </header>
+
+  <main class="container">
+    <h1>Check Your Website's Accessibility</h1>
+    <p class="subtitle">Enter a website URL to scan for accessibility issues like color contrast, missing alt text, and font sizing.</p>
+
+    <form id="scanForm">
+      <label for="urlInput">Website URL</label>
+      <input
+        type="url"
+        id="urlInput"
+        name="urlInput"
+        placeholder="https://example.com"
+        aria-describedby="urlHint"
+        required
+      >
+      <p id="urlHint" class="hint">Make sure to include https:// at the start</p>
+
+      <button type="submit">Scan Now</button>
+    </form>
+  </main>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Results | AccessiCheck</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header>
+    <div class="logo">AccessiCheck</div>
+  </header>
+
+  <main class="container results-page">
+    <h1>Scan Results</h1>
+    <p id="scannedUrl" class="subtitle"></p>
+
+    <!-- Summary Stats -->
+    <div class="summary-stats">
+      <div class="stat-box total">
+        <span class="stat-number" id="totalCount">0</span>
+        <span class="stat-label">Total Issues</span>
+      </div>
+      <div class="stat-box high">
+        <span class="stat-number" id="highCount">0</span>
+        <span class="stat-label">High</span>
+      </div>
+      <div class="stat-box moderate">
+        <span class="stat-number" id="moderateCount">0</span>
+        <span class="stat-label">Moderate</span>
+      </div>
+      <div class="stat-box minor">
+        <span class="stat-number" id="minorCount">0</span>
+        <span class="stat-label">Minor</span>
+      </div>
+    </div>
+
+    <!-- Issues List -->
+    <section id="issuesList" aria-label="Accessibility issues found"></section>
+
+    <a href="index.html" class="back-link">&larr; Scan another website</a>
+  </main>
+
+  <script src="js/results.js"></script>
+</body>
+</html>
