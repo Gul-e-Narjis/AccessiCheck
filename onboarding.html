@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How It Works | AccessiCheck</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header>
+    <div class="logo">AccessiCheck</div>
+  </header>
+
+  <main class="onboarding-page">
+    <div class="onboarding-card" role="region" aria-label="Onboarding tour" aria-live="polite">
+      <a href="index.html" class="skip-link">Skip</a>
+
+      <!-- Step 1 -->
+      <div class="onboarding-step active" data-step="1">
+        <div class="onboarding-img-wrap">
+          <img src="images/onboarding-accessibility.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="onboarding-img-fallback">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#14817b" stroke-width="1.6"><circle cx="12" cy="5" r="2.2"/><path d="M12,8 L12,14 M7,11 L17,11 M9,21 L12,14 L15,21"/></svg>
+          </div>
+        </div>
+        <span class="step-number">Step 1 of 3</span>
+        <h2>Why Accessibility Matters</h2>
+        <p>Over a billion people worldwide live with some form of disability. AccessiCheck helps you catch the barriers they face on your website — before your users do.</p>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="onboarding-step" data-step="2">
+        <div class="onboarding-img-wrap">
+          <img src="images/onboarding-pact.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="onboarding-img-fallback">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#14817b" stroke-width="1.6"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+          </div>
+        </div>
+        <span class="step-number">Step 2 of 3</span>
+        <h2>Grounded in PACT Analysis</h2>
+        <p>Every check we run is based on an established HCI framework — the same one used to design this tool itself.</p>
+        <div class="pact-chips">
+          <span class="pact-chip">People</span>
+          <span class="pact-chip">Activities</span>
+          <span class="pact-chip">Context</span>
+          <span class="pact-chip">Technology</span>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="onboarding-step" data-step="3">
+        <div class="onboarding-img-wrap">
+          <img src="images/onboarding-scan.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="onboarding-img-fallback">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#14817b" stroke-width="1.6"><circle cx="10" cy="10" r="6.5"/><path d="M14.8,14.8 L20,20"/></svg>
+          </div>
+        </div>
+        <span class="step-number">Step 3 of 3</span>
+        <h2>Scan Any Website in Seconds</h2>
+        <p>Paste a URL and AccessiCheck scans it using axe-core — the same engine accessibility professionals trust — then shows you a clear, prioritized report.</p>
+      </div>
+
+      <div class="onboarding-footer">
+        <div class="progress-dots" aria-hidden="true">
+          <span class="active" data-dot="1"></span>
+          <span data-dot="2"></span>
+          <span data-dot="3"></span>
+        </div>
+        <div class="onboarding-nav-buttons">
+          <button type="button" class="btn-text" id="backBtn" disabled>Back</button>
+          <button type="button" class="btn-primary" id="nextBtn">Next</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/onboarding.js"></script>
+</body>
+</html>

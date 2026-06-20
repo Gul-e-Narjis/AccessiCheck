@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | AccessiCheck</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header>
+    <div class="logo">AccessiCheck</div>
+  </header>
+
+  <main class="container dashboard-page">
+
+    <div id="errorState" hidden>
+      <h1>Scan Failed</h1>
+      <p class="subtitle">We couldn't scan this website. It may be blocking automated access, or the URL might be incorrect.</p>
+      <a href="index.html" class="back-link">&larr; Try another URL</a>
+    </div>
+
+    <div id="scoreState">
+      <h1>Accessibility Score</h1>
+      <p id="scannedUrl" class="subtitle"></p>
+
+      <div class="score-gauge-wrap">
+        <svg viewBox="0 0 200 125" role="img" aria-labelledby="gaugeTitle gaugeDesc">
+          <title id="gaugeTitle">Accessibility score gauge</title>
+          <desc id="gaugeDesc">Score out of 100, calculated from the number and severity of issues found</desc>
+          <path class="gauge-bg" d="M10,110 A90,90 0 0,1 190,110" fill="none" stroke="#d8ece9" stroke-width="16" stroke-linecap="round"/>
+          <path id="gaugeFg" d="M10,110 A90,90 0 0,1 190,110" fill="none" stroke-width="16" stroke-linecap="round"/>
+          <text x="100" y="92" text-anchor="middle" class="score-number" id="scoreNumberText">0</text>
+          <text x="100" y="112" text-anchor="middle" class="score-out-of">out of 100</text>
+        </svg>
+      </div>
+      <span class="score-label" id="scoreLabel"></span>
+
+      <div class="summary-stats cols-3">
+        <div class="stat-box high">
+          <span class="stat-number" id="highCount">0</span>
+          <span class="stat-label">High</span>
+        </div>
+        <div class="stat-box moderate">
+          <span class="stat-number" id="moderateCount">0</span>
+          <span class="stat-label">Moderate</span>
+        </div>
+        <div class="stat-box minor">
+          <span class="stat-number" id="minorCount">0</span>
+          <span class="stat-label">Minor</span>
+        </div>
+      </div>
+
+      <div class="dashboard-actions">
+        <a href="results.html" class="btn-secondary">View Full Report &rarr;</a>
+        <a href="index.html" class="btn-secondary">Scan Another Website</a>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

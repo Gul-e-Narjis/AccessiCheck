@@ -10,27 +10,129 @@
 
   <header>
     <div class="logo">AccessiCheck</div>
+    <a href="onboarding.html" class="header-link">How it works</a>
   </header>
 
-  <main class="container">
-    <h1>Check Your Website's Accessibility</h1>
-    <p class="subtitle">Enter a website URL to scan for accessibility issues like color contrast, missing alt text, and font sizing.</p>
+  <section class="hero">
+    <div class="hero-inner">
 
-    <form id="scanForm">
-      <label for="urlInput">Website URL</label>
-      <input
-        type="url"
-        id="urlInput"
-        name="urlInput"
-        placeholder="https://example.com"
-        aria-describedby="urlHint"
-        required
-      >
-      <p id="urlHint" class="hint">Make sure to include https:// at the start</p>
+      <div class="hero-text">
+        <span class="eyebrow">Free accessibility scanner</span>
+        <h1>See your website the way everyone else does.</h1>
+        <p class="hero-sub">Scan any URL for color contrast, missing alt text, and font-sizing issues in seconds — powered by axe-core, the same engine accessibility professionals use.</p>
 
-      <button type="submit">Scan Now</button>
-    </form>
-  </main>
+        <form id="scanForm" class="scan-form-card">
+          <label for="urlInput">Website URL</label>
+          <div class="input-row">
+            <input
+              type="url"
+              id="urlInput"
+              name="urlInput"
+              placeholder="https://example.com"
+              aria-describedby="urlHint"
+              required
+            >
+            <button type="submit" class="btn-primary">Scan Now</button>
+          </div>
+          <p id="urlHint" class="hint">Make sure to include https:// at the start</p>
+        </form>
+      </div>
+
+      <div class="hero-illustration" aria-hidden="true">
+        <svg viewBox="0 0 400 330" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="scanGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#e56f61" stop-opacity="0"/>
+              <stop offset="50%" stop-color="#e56f61" stop-opacity="0.55"/>
+              <stop offset="100%" stop-color="#e56f61" stop-opacity="0"/>
+            </linearGradient>
+            <clipPath id="cardClip">
+              <rect x="70" y="50" width="260" height="200" rx="14"/>
+            </clipPath>
+          </defs>
+
+          <!-- small sparkle accents -->
+          <circle cx="24" cy="100" r="3" fill="#edc05b" opacity="0.7"/>
+          <circle cx="376" cy="190" r="4" fill="#e56f61" opacity="0.55"/>
+          <circle cx="350" cy="40" r="3" fill="#edc05b" opacity="0.6"/>
+
+          <!-- browser card -->
+          <rect x="70" y="50" width="260" height="200" rx="14" fill="#ffffff"/>
+          <g clip-path="url(#cardClip)">
+            <rect x="70" y="50" width="260" height="30" fill="#e6f4f3"/>
+            <circle cx="86" cy="65" r="4" fill="#e56f61"/>
+            <circle cx="100" cy="65" r="4" fill="#edc05b"/>
+            <circle cx="114" cy="65" r="4" fill="#14817b"/>
+            <rect x="132" y="60" width="150" height="10" rx="5" fill="#c9e3e0"/>
+
+            <rect x="88" y="100" width="150" height="8" rx="4" fill="#e4e4e4"/>
+            <rect x="88" y="118" width="170" height="8" rx="4" fill="#e4e4e4"/>
+            <rect x="88" y="136" width="110" height="8" rx="4" fill="#e4e4e4"/>
+
+            <rect x="88" y="158" width="70" height="50" rx="6" fill="#e6f4f3"/>
+            <path d="M93,200 L108,182 L118,193 L132,176 L153,200 Z" fill="#72b9ab"/>
+            <circle cx="142" cy="170" r="6" fill="#edc05b"/>
+
+            <!-- animated scan beam -->
+            <rect class="scan-beam" x="76" y="150" width="248" height="46" rx="8" fill="url(#scanGradient)"/>
+          </g>
+          <rect x="70" y="50" width="260" height="200" rx="14" fill="none" stroke="#e0e0e0" stroke-width="1.5"/>
+
+          <!-- floating badge: alt-text check -->
+          <g class="float-badge">
+            <circle cx="333" cy="48" r="25" fill="#edc05b"/>
+            <path d="M321,49 L329,57 L346,38" fill="none" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+
+          <!-- floating badge: contrast check -->
+          <g class="float-badge delay-1">
+            <circle cx="58" cy="262" r="23" fill="#e56f61"/>
+            <circle cx="58" cy="262" r="11" fill="#ffffff"/>
+            <path d="M58,251 A11,11 0 0,1 58,273 Z" fill="#0f5e5e"/>
+          </g>
+
+          <!-- floating badge: keyboard nav check -->
+          <g class="float-badge delay-2">
+            <circle cx="300" cy="278" r="21" fill="#0f5e5e"/>
+            <rect x="287" y="270" width="26" height="17" rx="3" fill="none" stroke="#ffffff" stroke-width="2"/>
+            <circle cx="293" cy="278.5" r="1.6" fill="#ffffff"/>
+            <circle cx="300" cy="278.5" r="1.6" fill="#ffffff"/>
+            <circle cx="307" cy="278.5" r="1.6" fill="#ffffff"/>
+            <rect x="291" y="282.5" width="18" height="2.4" rx="1.2" fill="#ffffff"/>
+          </g>
+        </svg>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="features-strip">
+    <div class="features-inner">
+      <div class="feature-item">
+        <div class="feature-icon" style="background-color: var(--accent-coral-tint); color: var(--accent-coral-deep);">
+          <svg viewBox="0 0 24 24" width="26" height="26"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12,3 A9,9 0 0,1 12,21 Z" fill="currentColor"/></svg>
+        </div>
+        <h3>Color Contrast</h3>
+        <p>Flags text that's too hard to read against its background.</p>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon" style="background-color: var(--accent-gold-tint); color: var(--accent-gold-deep);">
+          <svg viewBox="0 0 24 24" width="26" height="26"><rect x="3" y="4" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="8" cy="10" r="1.5" fill="currentColor"/><path d="M4,16 L9,11 L13,15 L16,12 L20,16" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+        </div>
+        <h3>Missing Alt Text</h3>
+        <p>Finds images screen-reader users can't get any information from.</p>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon" style="background-color: var(--teal-light); color: var(--teal-dark);">
+          <svg viewBox="0 0 24 24" width="26" height="26"><text x="1" y="18" font-size="15" font-weight="700" fill="currentColor">A</text><text x="13" y="18" font-size="9" font-weight="700" fill="currentColor">a</text></svg>
+        </div>
+        <h3>Font Sizing</h3>
+        <p>Catches text set too small to comfortably read.</p>
+      </div>
+    </div>
+  </section>
 
   <script src="js/script.js"></script>
 </body>

@@ -36,7 +36,7 @@ function finishScan(error, violations) {
     sessionStorage.setItem('scanResults', JSON.stringify(violations));
     sessionStorage.removeItem('scanError');
   }
-  window.location.href = 'results.html';
+  window.location.href = 'dashboard.html';
 }
 
 async function runScan() {

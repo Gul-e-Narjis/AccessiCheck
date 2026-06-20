@@ -242,3 +242,350 @@ button:focus {
   color: var(--teal-dark);
   margin-bottom: 8px;
 }
+/* ===== Dashboard / Score Gauge ===== */
+.dashboard-page {
+  max-width: 650px;
+  text-align: center;
+}
+
+.score-gauge-wrap {
+  margin: 10px auto 0;
+  max-width: 300px;
+}
+
+.score-gauge-wrap svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+#gaugeFg {
+  stroke: var(--teal-primary);
+}
+
+.score-number {
+  font-size: 2.6rem;
+  font-weight: 800;
+  fill: var(--teal-dark);
+}
+
+.score-out-of {
+  font-size: 0.9rem;
+  fill: var(--text-light);
+}
+
+.score-label {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 6px 18px;
+  border-radius: 20px;
+}
+
+.score-label.good { background-color: var(--teal-light); color: var(--teal-dark); }
+.score-label.moderate { background-color: var(--severity-moderate-bg); color: var(--severity-moderate); }
+.score-label.poor { background-color: var(--severity-high-bg); color: var(--severity-high); }
+
+.summary-stats.cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dashboard-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.btn-secondary {
+  display: inline-block;
+  background-color: var(--white);
+  color: var(--teal-primary);
+  border: 2px solid var(--teal-primary);
+  padding: 10px 22px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.btn-secondary:hover {
+  background-color: var(--teal-light);
+}
+
+/* ===== Accessibility: focus states on all links/buttons ===== */
+a:focus,
+.btn-secondary:focus {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .spinner-large {
+    animation: none;
+  }
+  #gaugeFg {
+    transition: none !important;
+  }
+}
+
+/* ===== Contrast Accent Palette (from brand reference) ===== */
+:root {
+  --accent-coral: #e56f61;       /* decorative / icon fills only */
+  --accent-coral-deep: #b7584d;  /* AA-safe on white text, use for buttons */
+  --accent-coral-tint: #fbe4e0;  /* light bg tint */
+  --accent-gold: #edc05b;        /* decorative / icon fills only */
+  --accent-gold-deep: #8e7336;   /* AA-safe for text use */
+  --accent-gold-tint: #fbf0d9;   /* light bg tint */
+  --cream: #f9f0df;
+}
+
+/* ===== Hero (Home screen) — flows straight on from the existing header rules above ===== */
+.hero {
+  background: linear-gradient(160deg, var(--teal-dark) 0%, var(--teal-primary) 100%);
+  padding: 50px 40px 90px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before,
+.hero::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.hero::before {
+  width: 380px;
+  height: 380px;
+  background: var(--accent-coral);
+  top: -160px;
+  right: -120px;
+}
+
+.hero::after {
+  width: 260px;
+  height: 260px;
+  background: var(--accent-gold);
+  bottom: -140px;
+  left: -80px;
+}
+
+.hero-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 50px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-text {
+  flex: 1 1 420px;
+  min-width: 0;
+}
+
+.eyebrow {
+  display: inline-block;
+  color: var(--accent-gold);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.hero-text h1 {
+  color: var(--white);
+  font-size: 2.4rem;
+  line-height: 1.2;
+  margin-bottom: 14px;
+}
+
+.hero-sub {
+  color: #d6ece9;
+  font-size: 1.05rem;
+  margin-bottom: 28px;
+  max-width: 480px;
+}
+
+.scan-form-card {
+  background-color: var(--white);
+  border-radius: 14px;
+  padding: 28px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+  max-width: 460px;
+}
+
+.scan-form-card label {
+  color: var(--text-dark);
+}
+
+.input-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.input-row input[type="url"] {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.btn-primary {
+  background-color: var(--accent-coral-deep);
+  color: var(--white);
+  border: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-primary:hover {
+  background-color: #9c4639;
+}
+
+.btn-primary:focus,
+.input-row input:focus {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.hero-illustration {
+  flex: 1 1 360px;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.hero-illustration svg {
+  width: 100%;
+  max-width: 380px;
+  height: auto;
+}
+
+/* Scan beam sweep animation */
+.scan-beam {
+  animation: scanSweep 2.8s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes scanSweep {
+  0%   { transform: translateY(-78px); opacity: 0; }
+  10%  { opacity: 0.55; }
+  50%  { opacity: 0.55; }
+  90%  { opacity: 0; }
+  100% { transform: translateY(78px); opacity: 0; }
+}
+
+/* Floating badges */
+.float-badge {
+  animation: floatBadge 3.4s ease-in-out infinite;
+}
+
+.float-badge.delay-1 { animation-delay: 0.4s; }
+.float-badge.delay-2 { animation-delay: 0.9s; }
+
+@keyframes floatBadge {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scan-beam,
+  .float-badge {
+    animation: none !important;
+  }
+}
+
+/* ===== Responsive: stack hero on smaller screens ===== */
+@media (max-width: 880px) {
+  .hero-inner {
+    flex-direction: column;
+    text-align: left;
+    gap: 30px;
+  }
+  .hero-text,
+  .hero-illustration {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+  .hero-illustration {
+    order: -1;
+    max-width: 280px;
+    margin: 0 auto;
+  }
+  .hero-text h1 {
+    font-size: 1.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 36px 20px 70px;
+  }
+  .input-row {
+    flex-direction: column;
+  }
+  .btn-primary {
+    width: 100%;
+  }
+}
+
+/* ===== Features strip (below hero) ===== */
+.features-strip {
+  background-color: var(--cream);
+  padding: 50px 40px;
+}
+
+.features-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  gap: 40px;
+}
+
+.feature-item {
+  flex: 1;
+  text-align: left;
+}
+
+.feature-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.feature-item h3 {
+  font-size: 1.05rem;
+  color: var(--teal-dark);
+  margin-bottom: 6px;
+}
+
+.feature-item p {
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+
+@media (max-width: 700px) {
+  .features-inner {
+    flex-direction: column;
+    gap: 30px;
+  }
+}
