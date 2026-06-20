@@ -135,5 +135,12 @@
   </section>
 
   <script src="js/script.js"></script>
+
+  <!-- Auto-redirect to onboarding on first visit -->
+  <script>
+    if (!localStorage.getItem('ob_done')) {
+      window.location.replace('onboarding.html');
+    }
+  </script>
 </body>
 </html>

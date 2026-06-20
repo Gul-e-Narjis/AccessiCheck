@@ -5,6 +5,159 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Scanning... | AccessiCheck</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(160deg, #0f5e5e 0%, #14817b 100%);
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: transparent;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+    header .logo { color: #fff; }
+
+    .scan-stage {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      text-align: center;
+      gap: 0;
+    }
+
+    /* ── Radar ring animation ── */
+    .radar-wrap {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin-bottom: 44px;
+    }
+
+    .radar-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid rgba(114,185,171,0.6);
+      animation: radarPulse 2.4s ease-out infinite;
+    }
+    .radar-ring:nth-child(2) { animation-delay: 0.8s; }
+    .radar-ring:nth-child(3) { animation-delay: 1.6s; }
+
+    @keyframes radarPulse {
+      0%   { transform: scale(0.3); opacity: 0.9; }
+      100% { transform: scale(1.0); opacity: 0;   }
+    }
+
+    .radar-core {
+      position: absolute;
+      inset: 30px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* spinning arc */
+    .radar-arc {
+      position: absolute;
+      inset: 8px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      border-top-color: #edc05b;
+      border-right-color: rgba(237,192,91,0.4);
+      animation: spin 1.1s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .radar-icon {
+      font-size: 2rem;
+      animation: iconPop 2s ease-in-out infinite;
+    }
+
+    @keyframes iconPop {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+
+    /* ── Text area ── */
+    .scan-title {
+      color: #fff;
+      font-size: 1.75rem;
+      font-weight: 800;
+      margin: 0 0 10px;
+      letter-spacing: -0.01em;
+    }
+
+    .scan-url-display {
+      color: rgba(255,255,255,0.65);
+      font-size: 0.9rem;
+      margin: 0 0 32px;
+      max-width: 380px;
+      word-break: break-all;
+    }
+
+    /* ── Animated checklist ── */
+    .scan-steps {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 260px;
+      text-align: left;
+    }
+
+    .scan-step {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.4s ease;
+    }
+
+    .scan-step.done   { color: rgba(255,255,255,0.9); }
+    .scan-step.active { color: #edc05b; }
+
+    .step-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      flex-shrink: 0;
+      transition: all 0.4s ease;
+    }
+
+    .scan-step.done .step-icon {
+      background: #14817b;
+      border-color: #14817b;
+      color: #fff;
+    }
+    .scan-step.active .step-icon {
+      border-color: #edc05b;
+      color: #edc05b;
+      animation: spin 1s linear infinite;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .radar-ring, .radar-arc, .radar-icon, .step-icon { animation: none !important; }
+    }
+  </style>
 </head>
 <body>
 
@@ -12,13 +165,61 @@
     <div class="logo">AccessiCheck</div>
   </header>
 
-  <main class="container scan-page" role="status" aria-live="polite">
-    <div class="spinner-large"></div>
-    <h1>Scanning Website...</h1>
-    <p id="scanningUrl" class="subtitle"></p>
-    <p class="hint">This may take a few seconds</p>
+  <main class="scan-stage" role="status" aria-live="polite" aria-label="Scanning in progress">
+
+    <div class="radar-wrap" aria-hidden="true">
+      <div class="radar-ring"></div>
+      <div class="radar-ring"></div>
+      <div class="radar-ring"></div>
+      <div class="radar-core">
+        <div class="radar-arc"></div>
+        <span class="radar-icon">🔍</span>
+      </div>
+    </div>
+
+    <h1 class="scan-title">Scanning Website…</h1>
+    <p class="scan-url-display" id="scanningUrl"></p>
+
+    <ul class="scan-steps" aria-label="Scan progress">
+      <li class="scan-step active" id="step1">
+        <span class="step-icon">↻</span> Fetching page content
+      </li>
+      <li class="scan-step" id="step2">
+        <span class="step-icon">2</span> Loading axe-core engine
+      </li>
+      <li class="scan-step" id="step3">
+        <span class="step-icon">3</span> Auditing accessibility
+      </li>
+      <li class="scan-step" id="step4">
+        <span class="step-icon">4</span> Building your report
+      </li>
+    </ul>
+
   </main>
 
   <script src="js/scanning.js"></script>
+  <script>
+    // Animate the step indicators visually (cosmetic only — real progress is in scanning.js)
+    const stepEls = ['step1','step2','step3','step4'];
+    let stepIdx = 0;
+
+    function advanceStep() {
+      if (stepIdx > 0) {
+        const prev = document.getElementById(stepEls[stepIdx - 1]);
+        prev.classList.remove('active');
+        prev.classList.add('done');
+        prev.querySelector('.step-icon').textContent = '✓';
+      }
+      if (stepIdx < stepEls.length) {
+        document.getElementById(stepEls[stepIdx]).classList.add('active');
+        stepIdx++;
+        if (stepIdx < stepEls.length) {
+          setTimeout(advanceStep, 2800);
+        }
+      }
+    }
+
+    setTimeout(advanceStep, 800);
+  </script>
 </body>
 </html>

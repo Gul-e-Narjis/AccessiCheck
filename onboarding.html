@@ -3,78 +3,487 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>How It Works | AccessiCheck</title>
+  <title>Welcome | AccessiCheck</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #0f5e5e;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ════════════════════════════════
+       SLIDE WRAPPER
+    ════════════════════════════════ */
+    .slides-container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.8s ease;
+    }
+    .slide.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* ════════════════════════════════
+       VIDEO BACKGROUND
+    ════════════════════════════════ */
+    .slide-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    /* Fallback gradient when video fails */
+    .slide-fallback {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .slide:nth-child(1) .slide-fallback { background: linear-gradient(135deg, #0f5e5e 0%, #14817b 60%, #1a9e97 100%); }
+    .slide:nth-child(2) .slide-fallback { background: linear-gradient(135deg, #7b3f2b 0%, #b7584d 60%, #e56f61 100%); }
+    .slide:nth-child(3) .slide-fallback { background: linear-gradient(135deg, #3d3000 0%, #8e7336 60%, #edc05b 100%); }
+
+    /* Dark overlay on video */
+    .slide-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+    .slide:nth-child(1) .slide-overlay { background: linear-gradient(120deg, rgba(15,94,94,0.82) 0%, rgba(15,94,94,0.55) 50%, rgba(15,94,94,0.3) 100%); }
+    .slide:nth-child(2) .slide-overlay { background: linear-gradient(120deg, rgba(100,40,30,0.85) 0%, rgba(100,40,30,0.6) 50%, rgba(100,40,30,0.3) 100%); }
+    .slide:nth-child(3) .slide-overlay { background: linear-gradient(120deg, rgba(50,38,0,0.85) 0%, rgba(80,58,10,0.6) 50%, rgba(80,58,10,0.25) 100%); }
+
+    /* ════════════════════════════════
+       SLIDE CONTENT
+    ════════════════════════════════ */
+    .slide-content {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 8vw;
+      max-width: 680px;
+    }
+
+    /* Animated entrance for content when slide activates */
+    .slide.active .slide-content > * {
+      animation: contentIn 0.7s ease forwards;
+    }
+    .slide.active .slide-eyebrow  { animation-delay: 0.15s; opacity: 0; }
+    .slide.active .slide-heading  { animation-delay: 0.3s;  opacity: 0; }
+    .slide.active .slide-body     { animation-delay: 0.45s; opacity: 0; }
+    .slide.active .slide-extra    { animation-delay: 0.6s;  opacity: 0; }
+
+    @keyframes contentIn {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .slide-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 30px;
+      margin-bottom: 24px;
+      width: fit-content;
+    }
+    .slide:nth-child(1) .slide-eyebrow { background: rgba(237,192,91,0.2); color: #edc05b; border: 1px solid rgba(237,192,91,0.4); }
+    .slide:nth-child(2) .slide-eyebrow { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+    .slide:nth-child(3) .slide-eyebrow { background: rgba(237,192,91,0.2); color: #edc05b; border: 1px solid rgba(237,192,91,0.4); }
+
+    .slide-heading {
+      font-size: clamp(2rem, 4.5vw, 3.2rem);
+      font-weight: 900;
+      line-height: 1.12;
+      color: #fff;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+
+    .slide-heading em {
+      font-style: normal;
+      color: #edc05b;
+    }
+
+    .slide-body {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.82);
+      line-height: 1.75;
+      max-width: 480px;
+      margin-bottom: 32px;
+    }
+
+    .slide-extra { }
+
+    /* ── Slide 1: stat pills ── */
+    .stat-pills {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .stat-pill {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      backdrop-filter: blur(8px);
+      border-radius: 14px;
+      padding: 14px 20px;
+      color: #fff;
+      text-align: center;
+      min-width: 110px;
+    }
+    .stat-pill-num {
+      display: block;
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #edc05b;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .stat-pill-label {
+      font-size: 0.75rem;
+      opacity: 0.8;
+      line-height: 1.3;
+    }
+
+    /* ── Slide 2: PACT grid ── */
+    .pact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      max-width: 400px;
+    }
+    .pact-card {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      backdrop-filter: blur(8px);
+      border-radius: 12px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #fff;
+    }
+    .pact-card-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .pact-card-label { font-size: 0.88rem; font-weight: 700; letter-spacing: 0.04em; }
+    .pact-card-sub { font-size: 0.74rem; opacity: 0.7; margin-top: 2px; }
+
+    /* ── Slide 3: steps ── */
+    .how-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      max-width: 420px;
+    }
+    .how-step {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(8px);
+      border-radius: 12px;
+      padding: 14px 18px;
+      color: #fff;
+    }
+    .how-step-num {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: #edc05b;
+      color: #3d3000;
+      font-weight: 900;
+      font-size: 0.9rem;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .how-step-text { font-size: 0.9rem; font-weight: 600; }
+    .how-step-sub  { font-size: 0.76rem; opacity: 0.7; margin-top: 2px; }
+
+    /* ════════════════════════════════
+       SKIP BUTTON (top right)
+    ════════════════════════════════ */
+    .ob-skip {
+      position: fixed;
+      top: 28px; right: 36px;
+      z-index: 20;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 7px 18px;
+      border-radius: 20px;
+      backdrop-filter: blur(8px);
+    }
+    .ob-skip:hover { color: #fff; background: rgba(255,255,255,0.15); }
+
+    /* ════════════════════════════════
+       BOTTOM BAR: dots + nav
+    ════════════════════════════════ */
+    .ob-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 8vw 32px;
+      background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 100%);
+    }
+
+    .ob-dots {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .ob-dot {
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.35);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      width: 24px;
+    }
+    .ob-dot.active {
+      width: 48px;
+      background: #edc05b;
+    }
+
+    .ob-nav { display: flex; gap: 12px; align-items: center; }
+
+    .ob-btn-back {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: rgba(255,255,255,0.75);
+      padding: 11px 24px;
+      font-size: 0.9rem; font-weight: 700;
+      border-radius: 8px; cursor: pointer;
+      backdrop-filter: blur(8px);
+      transition: all 0.2s;
+    }
+    .ob-btn-back:hover { background: rgba(255,255,255,0.2); color: #fff; }
+    .ob-btn-back:disabled { opacity: 0.3; cursor: default; }
+
+    .ob-btn-next {
+      background: #edc05b;
+      color: #3d3000;
+      border: none;
+      padding: 12px 32px;
+      font-size: 0.95rem; font-weight: 900;
+      border-radius: 8px; cursor: pointer;
+      letter-spacing: 0.02em;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(237,192,91,0.35);
+    }
+    .ob-btn-next:hover {
+      background: #f5cd6b;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(237,192,91,0.5);
+    }
+    .ob-btn-next.last {
+      background: #fff;
+      color: #0f5e5e;
+      box-shadow: 0 4px 20px rgba(255,255,255,0.25);
+    }
+    .ob-btn-next.last:hover {
+      background: #e6f4f3;
+      box-shadow: 0 8px 28px rgba(255,255,255,0.35);
+    }
+
+    /* Logo top-left */
+    .ob-logo {
+      position: fixed;
+      top: 26px; left: 8vw;
+      z-index: 20;
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -0.01em;
+    }
+
+    /* focus */
+    button:focus, a:focus { outline: 3px solid #edc05b; outline-offset: 2px; }
+
+    @media (max-width: 640px) {
+      body { overflow: auto; }
+      .slide { position: relative; height: auto; min-height: 100vh; }
+      .slides-container { height: auto; }
+      .slide-content { padding: 80px 6vw 140px; }
+      .slide-heading { font-size: 1.9rem; }
+      .pact-grid { grid-template-columns: 1fr; max-width: 100%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .slide { transition: none; }
+      .slide.active .slide-content > * { animation: none; opacity: 1; }
+      .ob-btn-next:hover { transform: none; }
+    }
+  </style>
 </head>
 <body>
 
-  <header>
-    <div class="logo">AccessiCheck</div>
-  </header>
+<div class="ob-logo">AccessiCheck</div>
+<a href="index.html" class="ob-skip" id="skipLink">Skip →</a>
 
-  <main class="onboarding-page">
-    <div class="onboarding-card" role="region" aria-label="Onboarding tour" aria-live="polite">
-      <a href="index.html" class="skip-link">Skip</a>
+<div class="slides-container">
 
-      <!-- Step 1 -->
-      <div class="onboarding-step active" data-step="1">
-        <div class="onboarding-img-wrap">
-          <img src="images/onboarding-accessibility.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="onboarding-img-fallback">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#14817b" stroke-width="1.6"><circle cx="12" cy="5" r="2.2"/><path d="M12,8 L12,14 M7,11 L17,11 M9,21 L12,14 L15,21"/></svg>
+  <!-- ══ SLIDE 1: Why Accessibility Matters ══ -->
+  <div class="slide active" data-slide="1">
+    <div class="slide-fallback"></div>
+    <video class="slide-video" autoplay muted loop playsinline
+     src="videos/video1.mp4"
+      onerror="this.style.display='none'">
+    </video>
+    <div class="slide-overlay"></div>
+    <div class="slide-content">
+      <span class="slide-eyebrow">✦ Accessibility</span>
+      <h1 class="slide-heading">The web should work for <em>everyone.</em></h1>
+      <p class="slide-body">Over a billion people live with a disability. Inaccessible websites shut them out — bad contrast, missing labels, broken keyboard nav. AccessiCheck finds those barriers before your users do.</p>
+      <div class="slide-extra">
+        <div class="stat-pills">
+          <div class="stat-pill">
+            <span class="stat-pill-num">1B+</span>
+            <span class="stat-pill-label">people with disabilities</span>
           </div>
-        </div>
-        <span class="step-number">Step 1 of 3</span>
-        <h2>Why Accessibility Matters</h2>
-        <p>Over a billion people worldwide live with some form of disability. AccessiCheck helps you catch the barriers they face on your website — before your users do.</p>
-      </div>
-
-      <!-- Step 2 -->
-      <div class="onboarding-step" data-step="2">
-        <div class="onboarding-img-wrap">
-          <img src="images/onboarding-pact.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="onboarding-img-fallback">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#14817b" stroke-width="1.6"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+          <div class="stat-pill">
+            <span class="stat-pill-num">98%</span>
+            <span class="stat-pill-label">of top websites have accessibility issues</span>
           </div>
-        </div>
-        <span class="step-number">Step 2 of 3</span>
-        <h2>Grounded in PACT Analysis</h2>
-        <p>Every check we run is based on an established HCI framework — the same one used to design this tool itself.</p>
-        <div class="pact-chips">
-          <span class="pact-chip">People</span>
-          <span class="pact-chip">Activities</span>
-          <span class="pact-chip">Context</span>
-          <span class="pact-chip">Technology</span>
-        </div>
-      </div>
-
-      <!-- Step 3 -->
-      <div class="onboarding-step" data-step="3">
-        <div class="onboarding-img-wrap">
-          <img src="images/onboarding-scan.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="onboarding-img-fallback">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#14817b" stroke-width="1.6"><circle cx="10" cy="10" r="6.5"/><path d="M14.8,14.8 L20,20"/></svg>
+          <div class="stat-pill">
+            <span class="stat-pill-num">WCAG</span>
+            <span class="stat-pill-label">international standard we check against</span>
           </div>
-        </div>
-        <span class="step-number">Step 3 of 3</span>
-        <h2>Scan Any Website in Seconds</h2>
-        <p>Paste a URL and AccessiCheck scans it using axe-core — the same engine accessibility professionals trust — then shows you a clear, prioritized report.</p>
-      </div>
-
-      <div class="onboarding-footer">
-        <div class="progress-dots" aria-hidden="true">
-          <span class="active" data-dot="1"></span>
-          <span data-dot="2"></span>
-          <span data-dot="3"></span>
-        </div>
-        <div class="onboarding-nav-buttons">
-          <button type="button" class="btn-text" id="backBtn" disabled>Back</button>
-          <button type="button" class="btn-primary" id="nextBtn">Next</button>
         </div>
       </div>
     </div>
-  </main>
+  </div>
 
-  <script src="js/onboarding.js"></script>
+  <!-- ══ SLIDE 2: PACT Framework ══ -->
+  <div class="slide" data-slide="2">
+    <div class="slide-fallback"></div>
+    <video class="slide-video" muted loop playsinline
+     src="videos/video2.mp4"
+      onerror="this.style.display='none'">
+    </video>
+    <div class="slide-overlay"></div>
+    <div class="slide-content">
+      <span class="slide-eyebrow">✦ Our Approach</span>
+      <h2 class="slide-heading">Grounded in the <em>PACT</em> framework.</h2>
+      <p class="slide-body">Every check we run is based on an established HCI design method — the same framework used to build this tool itself. Real research, real results.</p>
+      <div class="slide-extra">
+        <div class="pact-grid">
+          <div class="pact-card">
+            <span class="pact-card-icon">👤</span>
+            <div>
+              <div class="pact-card-label">People</div>
+              <div class="pact-card-sub">Who uses your site</div>
+            </div>
+          </div>
+          <div class="pact-card">
+            <span class="pact-card-icon">⚡</span>
+            <div>
+              <div class="pact-card-label">Activities</div>
+              <div class="pact-card-sub">What they're trying to do</div>
+            </div>
+          </div>
+          <div class="pact-card">
+            <span class="pact-card-icon">📍</span>
+            <div>
+              <div class="pact-card-label">Context</div>
+              <div class="pact-card-sub">Where & how they use it</div>
+            </div>
+          </div>
+          <div class="pact-card">
+            <span class="pact-card-icon">💻</span>
+            <div>
+              <div class="pact-card-label">Technology</div>
+              <div class="pact-card-sub">Devices & assistive tech</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 3: How It Works ══ -->
+  <div class="slide" data-slide="3">
+    <div class="slide-fallback"></div>
+    <video class="slide-video" muted loop playsinline
+      src="videos/video3.mp4"
+      onerror="this.style.display='none'">
+    </video>
+    <div class="slide-overlay"></div>
+    <div class="slide-content">
+      <span class="slide-eyebrow">✦ How It Works</span>
+      <h2 class="slide-heading">Scan any URL in <em>seconds.</em></h2>
+      <p class="slide-body">Powered by axe-core — the same engine accessibility professionals use worldwide. No setup, no account, just results.</p>
+      <div class="slide-extra">
+        <div class="how-steps">
+          <div class="how-step">
+            <div class="how-step-num">1</div>
+            <div>
+              <div class="how-step-text">Paste a URL</div>
+              <div class="how-step-sub">Any public website works</div>
+            </div>
+          </div>
+          <div class="how-step">
+            <div class="how-step-num">2</div>
+            <div>
+              <div class="how-step-text">We scan with axe-core</div>
+              <div class="how-step-sub">Industry-standard WCAG engine</div>
+            </div>
+          </div>
+          <div class="how-step">
+            <div class="how-step-num">3</div>
+            <div>
+              <div class="how-step-text">Get a prioritized report</div>
+              <div class="how-step-sub">High / Moderate / Minor issues with fixes</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Bottom bar -->
+<div class="ob-bar">
+  <div class="ob-dots" id="obDots">
+    <div class="ob-dot active" data-dot="1"></div>
+    <div class="ob-dot" data-dot="2"></div>
+    <div class="ob-dot" data-dot="3"></div>
+  </div>
+  <div class="ob-nav">
+    <button class="ob-btn-back" id="backBtn" disabled>Back</button>
+    <button class="ob-btn-next" id="nextBtn">Next →</button>
+  </div>
+</div>
+
+<script src="js/onboarding.js"></script>
 </body>
 </html>
