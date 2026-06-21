@@ -267,6 +267,13 @@
       transition: all 0.4s ease;
       cursor: pointer;
       width: 24px;
+      border: none;
+      padding: 0;
+      display: block;
+    }
+    .ob-dot:focus-visible {
+      outline: 2px solid #edc05b;
+      outline-offset: 4px;
     }
     .ob-dot.active {
       width: 48px;
@@ -354,13 +361,13 @@
   <!-- ══ SLIDE 1: Why Accessibility Matters ══ -->
   <div class="slide active" data-slide="1">
     <div class="slide-fallback"></div>
-    <video class="slide-video" autoplay muted loop playsinline
+    <video class="slide-video" aria-hidden="true" autoplay muted loop playsinline
      src="videos/video1.mp4"
       onerror="this.style.display='none'">
     </video>
     <div class="slide-overlay"></div>
     <div class="slide-content">
-      <span class="slide-eyebrow">✦ Accessibility</span>
+      <span class="slide-eyebrow"><span aria-hidden="true">✦</span> Accessibility</span>
       <h1 class="slide-heading">The web should work for <em>everyone.</em></h1>
       <p class="slide-body">Over a billion people live with a disability. Inaccessible websites shut them out — bad contrast, missing labels, broken keyboard nav. AccessiCheck finds those barriers before your users do.</p>
       <div class="slide-extra">
@@ -385,40 +392,40 @@
   <!-- ══ SLIDE 2: PACT Framework ══ -->
   <div class="slide" data-slide="2">
     <div class="slide-fallback"></div>
-    <video class="slide-video" muted loop playsinline
+    <video class="slide-video" aria-hidden="true" muted loop playsinline
      src="videos/video2.mp4"
       onerror="this.style.display='none'">
     </video>
     <div class="slide-overlay"></div>
     <div class="slide-content">
-      <span class="slide-eyebrow">✦ Our Approach</span>
+      <span class="slide-eyebrow"><span aria-hidden="true">✦</span> Our Approach</span>
       <h2 class="slide-heading">Grounded in the <em>PACT</em> framework.</h2>
       <p class="slide-body">Every check we run is based on an established HCI design method — the same framework used to build this tool itself. Real research, real results.</p>
       <div class="slide-extra">
         <div class="pact-grid">
           <div class="pact-card">
-            <span class="pact-card-icon">👤</span>
+            <span class="pact-card-icon" aria-hidden="true">👤</span>
             <div>
               <div class="pact-card-label">People</div>
               <div class="pact-card-sub">Who uses your site</div>
             </div>
           </div>
           <div class="pact-card">
-            <span class="pact-card-icon">⚡</span>
+            <span class="pact-card-icon" aria-hidden="true">⚡</span>
             <div>
               <div class="pact-card-label">Activities</div>
               <div class="pact-card-sub">What they're trying to do</div>
             </div>
           </div>
           <div class="pact-card">
-            <span class="pact-card-icon">📍</span>
+            <span class="pact-card-icon" aria-hidden="true">📍</span>
             <div>
               <div class="pact-card-label">Context</div>
               <div class="pact-card-sub">Where & how they use it</div>
             </div>
           </div>
           <div class="pact-card">
-            <span class="pact-card-icon">💻</span>
+            <span class="pact-card-icon" aria-hidden="true">💻</span>
             <div>
               <div class="pact-card-label">Technology</div>
               <div class="pact-card-sub">Devices & assistive tech</div>
@@ -432,13 +439,13 @@
   <!-- ══ SLIDE 3: How It Works ══ -->
   <div class="slide" data-slide="3">
     <div class="slide-fallback"></div>
-    <video class="slide-video" muted loop playsinline
+    <video class="slide-video" aria-hidden="true" muted loop playsinline
       src="videos/video3.mp4"
       onerror="this.style.display='none'">
     </video>
     <div class="slide-overlay"></div>
     <div class="slide-content">
-      <span class="slide-eyebrow">✦ How It Works</span>
+      <span class="slide-eyebrow"><span aria-hidden="true">✦</span> How It Works</span>
       <h2 class="slide-heading">Scan any URL in <em>seconds.</em></h2>
       <p class="slide-body">Powered by axe-core — the same engine accessibility professionals use worldwide. No setup, no account, just results.</p>
       <div class="slide-extra">
@@ -474,9 +481,9 @@
 <!-- Bottom bar -->
 <div class="ob-bar">
   <div class="ob-dots" id="obDots">
-    <div class="ob-dot active" data-dot="1"></div>
-    <div class="ob-dot" data-dot="2"></div>
-    <div class="ob-dot" data-dot="3"></div>
+    <button class="ob-dot active" data-dot="1" aria-label="Slide 1 of 3" aria-current="true"></button>
+    <button class="ob-dot" data-dot="2" aria-label="Slide 2 of 3" aria-current="false"></button>
+    <button class="ob-dot" data-dot="3" aria-label="Slide 3 of 3" aria-current="false"></button>
   </div>
   <div class="ob-nav">
     <button class="ob-btn-back" id="backBtn" disabled>Back</button>

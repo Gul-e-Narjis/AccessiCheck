@@ -35,6 +35,23 @@ header {
   font-weight: 700;
 }
 
+.header-link {
+  color: var(--white);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.header-link:hover {
+  color: var(--accent-gold);
+}
+
+.header-link:focus {
+  outline: 3px solid var(--accent-gold);
+  outline-offset: 3px;
+}
+
 /* ===== Main Container ===== */
 .container {
   max-width: 600px;
@@ -176,6 +193,18 @@ button:focus {
 .issue-card.moderate { border-left-color: var(--severity-moderate); }
 .issue-card.minor { border-left-color: var(--severity-minor); }
 
+.issue-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.issue-card-actions .try-it-btn,
+.issue-card-actions .goto-element-btn {
+  margin-top: 0;
+}
+
 .issue-card h2 {
   font-size: 1.1rem;
   margin: 10px 0 6px;
@@ -202,12 +231,330 @@ button:focus {
   margin-top: 10px;
 }
 
+/* ── Fix Simulator ── */
+.try-it-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  background-color: var(--teal-light);
+  color: var(--teal-dark);
+  border: 1px solid var(--teal-primary);
+  padding: 8px 16px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.try-it-btn:hover {
+  background-color: var(--teal-primary);
+  color: var(--white);
+}
+
+.try-it-btn:focus {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.goto-element-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--accent-coral-tint);
+  color: var(--accent-coral-deep);
+  border: 1px solid var(--accent-coral);
+  padding: 8px 16px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.goto-element-btn:hover {
+  background-color: var(--accent-coral-deep);
+  color: var(--white);
+}
+
+.goto-element-btn:focus {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* ── Live Page Preview panel ── */
+.preview-panel {
+  background-color: var(--teal-light);
+  border: 1px solid var(--teal-primary);
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin: 0 0 26px;
+}
+
+.preview-heading {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+  color: var(--teal-dark);
+}
+
+.preview-subtitle {
+  margin: 0 0 12px;
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+
+.preview-frame {
+  width: 100%;
+  height: 380px;
+  border: 1px solid var(--teal-primary);
+  border-radius: 8px;
+  background-color: var(--white);
+  /* Read-only diagnostic view, not a mini-browser — links/forms inside
+     must not be clickable, or the user can accidentally navigate away
+     (e.g. an external "Learn more" link) and break the preview. */
+  pointer-events: none;
+}
+
+/* IMPORTANT: default state must be display:none so the [hidden] attribute
+   actually hides it. Author CSS overrides the browser's [hidden] rule at
+   equal specificity, so we re-declare it explicitly here. */
+.fix-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 30, 30, 0.65);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 100;
+  animation: fixOverlayIn 0.2s ease-out;
+}
+
+.fix-modal-overlay:not([hidden]) {
+  display: flex;
+}
+
+@keyframes fixOverlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fix-modal {
+  background: var(--white);
+  border-radius: 14px;
+  max-width: 740px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 36px;
+  position: relative;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.28);
+  border-top: 7px solid var(--teal-primary);
+  animation: fixModalIn 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes fixModalIn {
+  from { opacity: 0; transform: scale(0.93) translateY(16px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fix-modal-overlay,
+  .fix-modal {
+    animation: none;
+  }
+}
+
+/* Severity-themed accent border — matches the issue's badge color */
+.fix-modal--high { border-top-color: var(--severity-high); }
+.fix-modal--moderate { border-top-color: var(--severity-moderate); }
+.fix-modal--minor { border-top-color: var(--severity-minor); }
+
+.fix-modal #fixModalBadge {
+  margin-bottom: 10px;
+}
+
+.fix-modal h2 {
+  margin: 0 22px 14px 0;
+  font-size: 1.4rem;
+  color: var(--text-dark);
+}
+
+.fix-modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: none;
+  border: none;
+  font-size: 1.7rem;
+  line-height: 1;
+  color: var(--text-light);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.fix-modal-close:hover {
+  background-color: var(--teal-light);
+  color: var(--teal-dark);
+}
+
+.fix-modal-close:focus {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.fix-modal-fact {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background-color: var(--accent-gold-tint);
+  color: var(--accent-gold-deep);
+  padding: 14px 18px;
+  border-radius: 10px;
+  margin: 0 0 14px;
+}
+
+.fix-modal-fact-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.fix-modal-fact p {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+.fix-modal-why {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  font-style: italic;
+  margin: 0 0 20px;
+  padding-left: 2px;
+}
+
+.fix-compare {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 560px) {
+  .fix-compare {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.fix-block {
+  border-radius: 8px;
+  padding: 14px;
+  border: 1px solid transparent;
+}
+
+.fix-block.wrong {
+  background-color: var(--accent-coral-tint);
+  border-color: var(--accent-coral);
+}
+
+.fix-block.right {
+  background-color: var(--teal-light);
+  border-color: var(--teal-primary);
+}
+
+.fix-block-label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  margin-bottom: 8px;
+}
+
+.fix-block.wrong .fix-block-label { color: var(--accent-coral-deep); }
+.fix-block.right .fix-block-label { color: var(--teal-dark); }
+
+.fix-block pre {
+  margin: 0;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.fix-block code {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.8rem;
+  color: var(--text-dark);
+}
+
+.fix-modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.fix-modal-learn {
+  color: var(--teal-primary);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.fix-modal-learn:hover {
+  text-decoration: underline;
+}
+
+.fix-modal-learn:focus {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.fix-modal-copied {
+  color: var(--teal-dark);
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+
+/* ── Results page image banner (drop your own photo in images/results-banner.jpg) ── */
+.results-banner {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  border-radius: 12px;
+  margin: 4px 0 28px;
+  background: linear-gradient(135deg, var(--teal-light) 0%, var(--accent-gold-tint) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.results-banner-icon {
+  font-size: 2.5rem;
+}
+
+.results-banner-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .back-link {
   display: inline-block;
   margin-top: 20px;
   color: var(--teal-primary);
   font-weight: 600;
   text-decoration: none;
+}
+
+.download-pdf-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0 24px;
 }
 
 .back-link:hover {
@@ -286,6 +633,48 @@ button:focus {
 .score-label.good { background-color: var(--teal-light); color: var(--teal-dark); }
 .score-label.moderate { background-color: var(--severity-moderate-bg); color: var(--severity-moderate); }
 .score-label.poor { background-color: var(--severity-high-bg); color: var(--severity-high); }
+
+.progress-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 480px;
+  margin: 18px auto 0;
+  padding: 14px 18px;
+  border-radius: 10px;
+  text-align: left;
+  border: 1px solid transparent;
+}
+
+.progress-card p {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.progress-card .progress-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.progress-card.up {
+  background-color: var(--teal-light);
+  border-color: var(--teal-primary);
+  color: var(--teal-dark);
+}
+
+.progress-card.down {
+  background-color: var(--accent-coral-tint);
+  border-color: var(--accent-coral);
+  color: var(--accent-coral-deep);
+}
+
+.progress-card.same {
+  background-color: var(--accent-gold-tint);
+  border-color: var(--accent-gold);
+  color: var(--accent-gold-deep);
+}
 
 .summary-stats.cols-3 {
   grid-template-columns: repeat(3, 1fr);

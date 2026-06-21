@@ -5,6 +5,437 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard | AccessiCheck</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+
+    /* ── Page layout ── */
+    body {
+      background: #f0f4f8;
+      min-height: 100vh;
+    }
+
+    .dashboard-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 36px 24px 60px;
+    }
+
+    /* ── Hero score card ── */
+    .score-hero {
+      background: linear-gradient(135deg, #0f5e5e 0%, #14817b 60%, #1a9e96 100%);
+      border-radius: 24px;
+      padding: 48px 40px 40px;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(15,94,94,0.28);
+      margin-bottom: 24px;
+    }
+
+    /* decorative blobs */
+    .score-hero::before,
+    .score-hero::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.12;
+      pointer-events: none;
+    }
+    .score-hero::before {
+      width: 320px; height: 320px;
+      background: #edc05b;
+      top: -140px; right: -80px;
+    }
+    .score-hero::after {
+      width: 200px; height: 200px;
+      background: #fff;
+      bottom: -100px; left: -60px;
+    }
+
+    .score-hero-inner {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      position: relative;
+      z-index: 1;
+      flex-wrap: wrap;
+    }
+
+    /* gauge side */
+    .gauge-side {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .score-gauge-wrap {
+      width: 200px;
+      filter: drop-shadow(0 4px 16px rgba(0,0,0,0.18));
+    }
+
+    .score-gauge-wrap svg { display: block; width: 100%; height: auto; }
+
+    #gaugeFg { stroke: #edc05b; }
+
+    .score-number { font-size: 2.6rem; font-weight: 800; fill: #fff; }
+    .score-out-of { font-size: 0.88rem; fill: rgba(255,255,255,0.7); }
+
+    .score-label {
+      display: inline-block;
+      font-size: 0.85rem;
+      font-weight: 800;
+      padding: 5px 18px;
+      border-radius: 20px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .score-label.good     { background: rgba(255,255,255,0.18); color: #fff; border: 1.5px solid rgba(255,255,255,0.35); }
+    .score-label.moderate { background: rgba(237,192,91,0.25);  color: #edc05b; border: 1.5px solid #edc05b; }
+    .score-label.poor     { background: rgba(224,100,80,0.25);  color: #ffaaaa; border: 1.5px solid #ff8888; }
+
+    /* text side */
+    .score-text-side {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .score-eyebrow {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 8px;
+    }
+
+    .score-site-name {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fff;
+      margin: 0 0 6px;
+      word-break: break-all;
+    }
+
+    #scannedUrl {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.55);
+      margin: 0 0 20px;
+      word-break: break-all;
+    }
+
+    /* progress card inside hero */
+    .progress-card {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 10px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      max-width: 360px;
+      color: #fff;
+    }
+    .progress-card p { margin: 0; font-size: 0.88rem; line-height: 1.5; }
+    .progress-card .progress-icon { font-size: 1.3rem; flex-shrink: 0; }
+
+    /* ── Stats row ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px 20px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      position: relative;
+      overflow: hidden;
+      border-top: 4px solid transparent;
+    }
+
+    .stat-card.high     { border-top-color: #c0392b; }
+    .stat-card.moderate { border-top-color: #b8650b; }
+    .stat-card.minor    { border-top-color: #1a5fb4; }
+
+    .stat-card-icon {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .stat-card .stat-number {
+      display: block;
+      font-size: 2.4rem;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .stat-card.high     .stat-number { color: #c0392b; }
+    .stat-card.moderate .stat-number { color: #b8650b; }
+    .stat-card.minor    .stat-number { color: #1a5fb4; }
+
+    .stat-card .stat-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* decorative bg number */
+    .stat-card::after {
+      content: attr(data-num);
+      position: absolute;
+      right: 10px;
+      bottom: -8px;
+      font-size: 5rem;
+      font-weight: 900;
+      opacity: 0.05;
+      color: #000;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    /* ── What this means card ── */
+    .insight-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 28px 28px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      margin-bottom: 24px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .insight-icon-wrap {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #0f5e5e, #14817b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+
+    .insight-card h3 {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #999;
+      margin: 0 0 6px;
+    }
+
+    .insight-card p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* ── Action buttons ── */
+    .dashboard-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary-dash {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #0f5e5e, #14817b);
+      color: #fff;
+      text-decoration: none;
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      box-shadow: 0 4px 16px rgba(15,94,94,0.3);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn-primary-dash:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(15,94,94,0.4);
+    }
+
+    .btn-secondary-dash {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      color: #0f5e5e;
+      text-decoration: none;
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      border: 2px solid #d8ece9;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .btn-secondary-dash:hover {
+      border-color: #14817b;
+      background: #f0f9f8;
+    }
+
+    /* ── Error state ── */
+    .error-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 48px 32px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .error-card .error-emoji { font-size: 3rem; margin-bottom: 16px; }
+    .error-card h1 { color: #c0392b; margin-bottom: 10px; }
+    .error-card p { color: #666; margin-bottom: 24px; }
+
+    /* ── Section divider ── */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 32px 0 20px;
+    }
+    .section-divider::before,
+    .section-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #dde3e8;
+    }
+    .section-divider span {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #999;
+      white-space: nowrap;
+    }
+
+    /* ── Quick wins grid ── */
+    .quick-wins-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    .quick-win-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 18px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      transition: transform 0.18s, box-shadow 0.18s;
+    }
+    .quick-win-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+    .qw-icon-wrap {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .qw-text strong {
+      display: block;
+      font-size: 0.88rem;
+      color: #1a1a1a;
+      margin-bottom: 4px;
+    }
+    .qw-text p {
+      margin: 0;
+      font-size: 0.8rem;
+      color: #666;
+      line-height: 1.5;
+    }
+    .qw-text code {
+      font-size: 0.78rem;
+      background: #f0f0f0;
+      padding: 1px 4px;
+      border-radius: 4px;
+      color: #333;
+    }
+
+    /* ── WCAG Banner ── */
+    .wcag-banner {
+      background: linear-gradient(135deg, #0f5e5e 0%, #14817b 100%);
+      border-radius: 16px;
+      padding: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+      box-shadow: 0 8px 28px rgba(15,94,94,0.22);
+      margin-bottom: 8px;
+    }
+    .wcag-banner-left {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      flex: 1;
+      min-width: 220px;
+    }
+    .wcag-banner-left strong {
+      display: block;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .wcag-banner-left p {
+      margin: 0;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.55;
+      max-width: 380px;
+    }
+    .wcag-badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .wcag-badge {
+      background: rgba(255,255,255,0.15);
+      border: 1.5px solid rgba(255,255,255,0.3);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 5px 14px;
+      border-radius: 20px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .score-hero { padding: 32px 22px; }
+      .score-hero-inner { flex-direction: column; gap: 24px; }
+      .score-gauge-wrap { width: 160px; }
+      .stats-row { grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+      .stat-card { padding: 18px 10px; }
+      .stat-card .stat-number { font-size: 1.8rem; }
+      .quick-wins-grid { grid-template-columns: 1fr; }
+      .wcag-banner { flex-direction: column; }
+      .wcag-badges { justify-content: flex-start; }
+    }
+  </style>
 </head>
 <body>
 
@@ -12,53 +443,210 @@
     <div class="logo">AccessiCheck</div>
   </header>
 
-  <main class="container dashboard-page">
+  <div class="dashboard-wrap">
 
+    <!-- ERROR STATE -->
     <div id="errorState" hidden>
-      <h1>Scan Failed</h1>
-      <p class="subtitle">We couldn't scan this website. It may be blocking automated access, or the URL might be incorrect.</p>
-      <a href="index.html" class="back-link">&larr; Try another URL</a>
+      <div class="error-card">
+        <div class="error-emoji">⚠️</div>
+        <h1>Scan Failed</h1>
+        <p>We couldn't scan this website. It may be blocking automated access, or the URL might be incorrect.</p>
+        <a href="index.html" class="btn-secondary-dash">&larr; Try another URL</a>
+      </div>
     </div>
 
+    <!-- SCORE STATE -->
     <div id="scoreState">
-      <h1>Accessibility Score</h1>
-      <p id="scannedUrl" class="subtitle"></p>
 
-      <div class="score-gauge-wrap">
-        <svg viewBox="0 0 200 125" role="img" aria-labelledby="gaugeTitle gaugeDesc">
-          <title id="gaugeTitle">Accessibility score gauge</title>
-          <desc id="gaugeDesc">Score out of 100, calculated from the number and severity of issues found</desc>
-          <path class="gauge-bg" d="M10,110 A90,90 0 0,1 190,110" fill="none" stroke="#d8ece9" stroke-width="16" stroke-linecap="round"/>
-          <path id="gaugeFg" d="M10,110 A90,90 0 0,1 190,110" fill="none" stroke-width="16" stroke-linecap="round"/>
-          <text x="100" y="92" text-anchor="middle" class="score-number" id="scoreNumberText">0</text>
-          <text x="100" y="112" text-anchor="middle" class="score-out-of">out of 100</text>
-        </svg>
+      <!-- Hero Score Card -->
+      <div class="score-hero">
+        <div class="score-hero-inner">
+
+          <div class="gauge-side">
+            <div class="score-gauge-wrap">
+              <svg viewBox="0 0 200 125" role="img" aria-labelledby="gaugeTitle gaugeDesc">
+                <title id="gaugeTitle">Accessibility score gauge</title>
+                <desc id="gaugeDesc">Score out of 100, calculated from the number and severity of issues found</desc>
+                <path class="gauge-bg" d="M10,110 A90,90 0 0,1 190,110" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="16" stroke-linecap="round"/>
+                <path id="gaugeFg" d="M10,110 A90,90 0 0,1 190,110" fill="none" stroke-width="16" stroke-linecap="round"/>
+                <text x="100" y="92" text-anchor="middle" class="score-number" id="scoreNumberText">0</text>
+                <text x="100" y="112" text-anchor="middle" class="score-out-of">out of 100</text>
+              </svg>
+            </div>
+            <span class="score-label" id="scoreLabel"></span>
+          </div>
+
+          <div class="score-text-side">
+            <div class="score-eyebrow">Accessibility Audit</div>
+            <h1 class="score-site-name">Your Score</h1>
+            <p id="scannedUrl"></p>
+
+            <div id="progressCard" class="progress-card" hidden>
+              <span class="progress-icon" id="progressIcon" aria-hidden="true">✨</span>
+              <p id="progressText"></p>
+            </div>
+          </div>
+
+        </div>
       </div>
-      <span class="score-label" id="scoreLabel"></span>
 
-      <div class="summary-stats cols-3">
-        <div class="stat-box high">
+      <!-- Stats Row -->
+      <div class="stats-row summary-stats">
+        <div class="stat-card high" data-num="!">
+          <span class="stat-card-icon">🔴</span>
           <span class="stat-number" id="highCount">0</span>
           <span class="stat-label">High</span>
         </div>
-        <div class="stat-box moderate">
+        <div class="stat-card moderate" data-num="~">
+          <span class="stat-card-icon">🟠</span>
           <span class="stat-number" id="moderateCount">0</span>
           <span class="stat-label">Moderate</span>
         </div>
-        <div class="stat-box minor">
+        <div class="stat-card minor" data-num="·">
+          <span class="stat-card-icon">🔵</span>
           <span class="stat-number" id="minorCount">0</span>
           <span class="stat-label">Minor</span>
         </div>
       </div>
 
-      <div class="dashboard-actions">
-        <a href="results.html" class="btn-secondary">View Full Report &rarr;</a>
-        <a href="index.html" class="btn-secondary">Scan Another Website</a>
+      <!-- Insight Card -->
+      <div class="insight-card">
+        <div class="insight-icon-wrap">♿</div>
+        <div>
+          <h3>What this means</h3>
+          <p id="insightText">Your accessibility score reflects how usable your site is for people with disabilities. Fix high-severity issues first — they impact screen reader users the most.</p>
+        </div>
       </div>
-    </div>
 
-  </main>
+      <!-- Actions -->
+      <div class="dashboard-actions">
+        <a href="results.html" class="btn-primary-dash">View Full Report &rarr;</a>
+        <a href="index.html" class="btn-secondary-dash">↩ Scan Another Website</a>
+      </div>
+
+      <!-- ── Scan History Chart ── -->
+      <div class="section-divider">
+        <span>Score History</span>
+      </div>
+
+      <div class="history-card" id="historyCard">
+        <div class="history-header">
+          <div>
+            <h3>Progress Over Time</h3>
+            <p id="historySubtitle">Scan this site multiple times to track improvement</p>
+          </div>
+          <span class="history-site-tag" id="historySiteTag"></span>
+        </div>
+
+        <!-- Empty state -->
+        <div class="history-empty" id="historyEmpty">
+          <svg width="56" height="56" viewBox="0 0 56 56" fill="none" aria-hidden="true">
+            <circle cx="28" cy="28" r="26" fill="#e6f4f3" stroke="#b2ddd9" stroke-width="1.5"/>
+            <path d="M16 36 L22 26 L28 30 L34 20 L40 28" stroke="#14817b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <circle cx="22" cy="26" r="2.5" fill="#14817b"/>
+            <circle cx="28" cy="30" r="2.5" fill="#14817b"/>
+            <circle cx="34" cy="20" r="2.5" fill="#edc05b"/>
+            <circle cx="40" cy="28" r="2.5" fill="#14817b"/>
+          </svg>
+          <p>Scan this site again after fixing issues<br>to see your score trend here.</p>
+        </div>
+
+        <!-- Chart area -->
+        <div class="history-chart-wrap" id="historyChartWrap" hidden>
+          <canvas id="historyCanvas" height="120" aria-label="Score history chart"></canvas>
+          <div class="history-x-labels" id="historyXLabels"></div>
+        </div>
+
+        <div class="history-legend" id="historyLegend" hidden>
+          <span class="legend-dot" style="background:#14817b"></span> Score over time
+          <span style="margin-left:16px;" class="legend-dot" style="background:#edc05b"></span>
+          <span id="historyBestLabel"></span>
+        </div>
+      </div>
+
+      <!-- ── Share Section ── -->
+      <div class="section-divider">
+        <span>Share Your Results</span>
+      </div>
+
+      <div class="share-card">
+        <div class="share-card-left">
+          <div class="share-illustration" aria-hidden="true">
+            <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
+              <circle cx="36" cy="36" r="34" fill="linear-gradient(135deg,#e6f4f3,#b2ddd9)"/>
+              <circle cx="36" cy="36" r="34" fill="#e6f4f3"/>
+              <!-- main share icon -->
+              <circle cx="52" cy="22" r="7" fill="#14817b"/>
+              <circle cx="20" cy="36" r="7" fill="#0f5e5e"/>
+              <circle cx="52" cy="50" r="7" fill="#edc05b"/>
+              <path d="M27 33 L45 25M27 39 L45 47" stroke="#14817b" stroke-width="2.5" stroke-linecap="round"/>
+              <circle cx="52" cy="22" r="3" fill="#fff"/>
+              <circle cx="20" cy="36" r="3" fill="#fff"/>
+              <circle cx="52" cy="50" r="3" fill="#fff"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Share Your Audit</h3>
+            <p>Show your team, client, or professor your accessibility score and what you're doing to improve it.</p>
+          </div>
+        </div>
+
+        <div class="share-actions">
+
+          <button class="share-btn copy-btn" id="shareCopyBtn" aria-label="Copy score summary to clipboard">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="2"/>
+              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            Copy Summary
+          </button>
+
+          <button class="share-btn pdf-btn" id="shareDownloadBtn" aria-label="Download PDF report">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2"/>
+              <path d="M14 2v6h6M12 18v-6M9 15l3 3 3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Download PDF
+          </button>
+
+          <button class="share-btn print-btn" onclick="window.print()" aria-label="Print this page">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9V2h12v7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2" stroke="currentColor" stroke-width="2"/>
+              <rect x="6" y="14" width="12" height="8" rx="1" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            Print
+          </button>
+
+        </div>
+
+        <div class="share-copied-msg" id="shareCopiedMsg" hidden>
+          ✅ Copied to clipboard!
+        </div>
+      </div>
+
+    </div>
+  </div>
 
   <script src="js/dashboard.js"></script>
+
+  <!-- Insight text based on score band -->
+  <script>
+    // Wait for dashboard.js to populate scoreLabel, then set insight text
+    window.addEventListener('load', function () {
+      const label = document.getElementById('scoreLabel');
+      const insight = document.getElementById('insightText');
+      if (!label || !insight) return;
+      const band = label.classList.contains('good') ? 'good'
+                 : label.classList.contains('moderate') ? 'moderate' : 'poor';
+      const messages = {
+        good:     'Great job! Your site is largely accessible. Review the remaining issues to make it perfect for all users.',
+        moderate: 'There\'s room to improve. Fixing moderate issues will significantly boost usability for screen reader and keyboard users.',
+        poor:     'Several high-impact issues need urgent attention. These affect users who rely on assistive technologies daily.'
+      };
+      insight.textContent = messages[band] || messages.good;
+    });
+  </script>
+
 </body>
 </html>

@@ -29,12 +29,22 @@ async function fetchWithFallback(targetUrl) {
   throw new Error('All proxies failed');
 }
 
-function finishScan(error, violations) {
+function finishScan(error, violations, cleanHtml) {
   if (error) {
     sessionStorage.setItem('scanError', 'true');
+    sessionStorage.removeItem('scanHtml');
   } else {
     sessionStorage.setItem('scanResults', JSON.stringify(violations));
     sessionStorage.removeItem('scanError');
+    // Save the scanned page's HTML too — powers the "Go to Element" live preview
+    // on results.html. Wrapped in try/catch: very large pages can exceed
+    // sessionStorage's quota, in which case the preview just won't be available.
+    try {
+      sessionStorage.setItem('scanHtml', cleanHtml || '');
+    } catch (e) {
+      console.warn('Could not store scanHtml (quota exceeded) — live preview will be unavailable.', e);
+      sessionStorage.removeItem('scanHtml');
+    }
   }
   window.location.href = 'dashboard.html';
 }
@@ -43,6 +53,9 @@ async function runScan() {
   try {
     let html = await fetchWithFallback(url);
     html = html.replace(/<head>/i, `<head><base href="${url}">`);
+
+    // Keep an unmodified copy (no scanner script) for the live preview iframe
+    const cleanHtml = html;
 
     const scannerScriptTag = `
       <script>
@@ -92,7 +105,7 @@ async function runScan() {
       finished = true;
       clearTimeout(timeout);
       window.removeEventListener('message', handleMessage);
-      finishScan(event.data.error, event.data.violations);
+      finishScan(event.data.error, event.data.violations, cleanHtml);
     });
 
     iframe.srcdoc = html;

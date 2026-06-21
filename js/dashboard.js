@@ -44,6 +44,70 @@ if (scanError === 'true') {
   scoreLabel.textContent = band.label;
   scoreLabel.classList.add(band.key);
 
+  // ── Accessibility Debt Tracker (gamification, localStorage-based) ──
+  function normalizeUrl(u) {
+    return (u || '').trim().toLowerCase().replace(/\/$/, '').replace(/^https?:\/\//, '');
+  }
+
+  function getHistory() {
+    try {
+      return JSON.parse(localStorage.getItem('ac_scan_history') || '{}');
+    } catch {
+      return {};
+    }
+  }
+
+  function saveHistory(history) {
+    localStorage.setItem('ac_scan_history', JSON.stringify(history));
+  }
+
+  const totalIssues = highCount + moderateCount + minorCount;
+  const history = getHistory();
+  const key = normalizeUrl(url);
+  const pastScans = history[key] || [];
+  const lastScan = pastScans[pastScans.length - 1];
+
+  const progressCard = document.getElementById('progressCard');
+  const progressIcon = document.getElementById('progressIcon');
+  const progressText = document.getElementById('progressText');
+
+  progressCard.hidden = false;
+
+  if (lastScan) {
+    const scoreDelta = score - lastScan.score;
+    const issuesDelta = lastScan.total - totalIssues; // positive = fixed
+
+    if (issuesDelta > 0) {
+      progressCard.className = 'progress-card up';
+      progressIcon.textContent = '🎉';
+      progressText.textContent = `${issuesDelta} issue${issuesDelta !== 1 ? 's' : ''} fixed since last scan! Score ${scoreDelta >= 0 ? '+' : ''}${scoreDelta} (${lastScan.score} → ${score}).`;
+    } else if (issuesDelta < 0) {
+      progressCard.className = 'progress-card down';
+      progressIcon.textContent = '⚠️';
+      progressText.textContent = `${Math.abs(issuesDelta)} new issue${Math.abs(issuesDelta) !== 1 ? 's' : ''} since last scan. Score ${scoreDelta} (${lastScan.score} → ${score}).`;
+    } else {
+      progressCard.className = 'progress-card same';
+      progressIcon.textContent = '➖';
+      progressText.textContent = `No change since last scan — still ${totalIssues} issue${totalIssues !== 1 ? 's' : ''}.`;
+    }
+  } else {
+    progressCard.className = 'progress-card same';
+    progressIcon.textContent = '✨';
+    progressText.textContent = 'First scan of this site — scan it again later to track your progress here.';
+  }
+
+  // Save this scan into history (keep last 10 per URL)
+  pastScans.push({
+    timestamp: Date.now(),
+    score,
+    total: totalIssues,
+    high: highCount,
+    moderate: moderateCount,
+    minor: minorCount
+  });
+  history[key] = pastScans.slice(-10);
+  saveHistory(history);
+
   const gaugeFg = document.getElementById('gaugeFg');
   const colorMap = {
     good: '#14817b',      // var(--teal-primary)

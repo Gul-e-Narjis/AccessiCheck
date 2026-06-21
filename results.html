@@ -16,6 +16,11 @@
     <h1>Scan Results</h1>
     <p id="scannedUrl" class="subtitle"></p>
 
+    <div class="results-banner" id="resultsBanner">
+      <span class="results-banner-icon" aria-hidden="true">📊</span>
+      <img src="images/results-banner.jpg" alt="" class="results-banner-img" onerror="this.remove()">
+    </div>
+
     <!-- Summary Stats -->
     <div class="summary-stats">
       <div class="stat-box total">
@@ -36,13 +41,65 @@
       </div>
     </div>
 
+    <button type="button" id="downloadPdfBtn" class="btn-primary download-pdf-btn">
+      <span aria-hidden="true">⬇</span> Download Full Audit Report (PDF)
+    </button>
+
+    <!-- Live Page Preview — "Go to Element" highlights issues directly here -->
+    <section id="previewPanel" class="preview-panel" hidden aria-label="Live preview of scanned page">
+      <h2 class="preview-heading">📍 Live Page Preview</h2>
+      <p class="preview-subtitle">Click "Go to Element" on any issue below to jump straight to it here.</p>
+      <iframe id="previewFrame" class="preview-frame" title="Live preview of the scanned website"></iframe>
+    </section>
+
     <!-- Issues List -->
     <section id="issuesList" aria-label="Accessibility issues found"></section>
+
+    <!-- Fix Simulator Modal -->
+    <div id="fixModalOverlay" class="fix-modal-overlay" hidden>
+      <div class="fix-modal" role="dialog" aria-modal="true" aria-labelledby="fixModalTitle" id="fixModal">
+        <button type="button" class="fix-modal-close" id="fixModalClose" aria-label="Close fix example">&times;</button>
+
+        <!-- 1. Severity badge + title -->
+        <span class="badge" id="fixModalBadge"></span>
+        <h2 id="fixModalTitle"></h2>
+
+        <!-- 2. Fun fact / analogy -->
+        <div class="fix-modal-fact">
+          <span class="fix-modal-fact-icon" aria-hidden="true">💡</span>
+          <p id="fixModalFact"></p>
+        </div>
+
+        <!-- 3. Why it matters (WCAG reference) -->
+        <p class="fix-modal-why" id="fixModalWhy"></p>
+
+        <!-- 4 & 5. Before / after code -->
+        <div class="fix-compare">
+          <div class="fix-block wrong">
+            <span class="fix-block-label">❌ Your code</span>
+            <pre><code id="fixModalWrongCode"></code></pre>
+          </div>
+          <div class="fix-block right">
+            <span class="fix-block-label">✅ Fixed example</span>
+            <pre><code id="fixModalRightCode"></code></pre>
+          </div>
+        </div>
+
+        <!-- 6. Actions -->
+        <div class="fix-modal-actions">
+          <button type="button" class="btn-primary" id="fixModalCopyBtn">Copy Fix</button>
+          <a href="#" target="_blank" rel="noopener" class="fix-modal-learn" id="fixModalLearnLink">Learn more →</a>
+          <span class="fix-modal-copied" id="fixModalCopiedMsg" hidden>✓ Copied!</span>
+        </div>
+      </div>
+    </div>
 
     <a href="dashboard.html" class="back-link">&larr; Back to Dashboard</a>
     <a href="index.html" class="back-link" style="margin-left: 20px;">Scan another website</a>
   </main>
 
+  <script src="js/fixData.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
   <script src="js/results.js"></script>
 </body>
 </html>

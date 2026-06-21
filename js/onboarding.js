@@ -1,5 +1,6 @@
 const total = 3;
 let current = 1;
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const slides  = document.querySelectorAll('.slide');
 const dots    = document.querySelectorAll('.ob-dot');
@@ -10,15 +11,20 @@ function render(prev) {
   slides.forEach(s => {
     const isActive = +s.dataset.slide === current;
     s.classList.toggle('active', isActive);
-    // Play/pause video
+    s.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+    // Play/pause video (respect reduced-motion preference)
     const vid = s.querySelector('video');
     if (vid) {
-      if (isActive) { vid.play().catch(() => {}); }
+      if (isActive && !reduceMotion) { vid.play().catch(() => {}); }
       else { vid.pause(); }
     }
   });
 
-  dots.forEach(d => d.classList.toggle('active', +d.dataset.dot === current));
+  dots.forEach(d => {
+    const isActive = +d.dataset.dot === current;
+    d.classList.toggle('active', isActive);
+    d.setAttribute('aria-current', isActive ? 'true' : 'false');
+  });
 
   backBtn.disabled = current === 1;
   const isLast = current === total;
