@@ -61,16 +61,12 @@ if (scanError === 'true') {
   document.getElementById('moderateCount').textContent = moderateCount;
   document.getElementById('minorCount').textContent = minorCount;
 
-  // ── Live preview setup (powers "Go to Element") ──
+  // ── Live preview availability check (powers "Go to Element") ──
+  // The actual iframe now lives on its own dedicated screen (preview.html);
+  // here we only need to know whether a preview is possible at all, so we
+  // can decide whether to show the "Go to Element" button per issue.
   const scanHtml = sessionStorage.getItem('scanHtml');
   const previewAvailable = !!scanHtml;
-  if (previewAvailable) {
-    const previewFrame = document.getElementById('previewFrame');
-    const previewPanel = document.getElementById('previewPanel');
-    previewFrame.setAttribute('sandbox', 'allow-same-origin');
-    previewFrame.srcdoc = scanHtml;
-    previewPanel.hidden = false;
-  }
 
  if (issues.length === 0) {
     issuesList.innerHTML = `
@@ -200,47 +196,15 @@ if (scanError === 'true') {
   });
 
   // ── Interactive Contextual Navigation ("Go to Element") ──
-  const reduceMotionPref = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  function goToElement(selector) {
-    const previewFrame = document.getElementById('previewFrame');
-    const previewPanel = document.getElementById('previewPanel');
-
-    previewPanel.scrollIntoView({ behavior: reduceMotionPref ? 'auto' : 'smooth', block: 'start' });
-
-    // Always force a fresh reload of the original scanned HTML before
-    // searching for the element. This makes "Go to Element" self-healing:
-    // even if the preview somehow ended up on a different page (e.g. a
-    // blocked navigation), every click resets it back to the real scan.
-    previewFrame.onload = () => {
-      previewFrame.onload = null; // run once per click
-
-      let targetEl;
-      try {
-        targetEl = previewFrame.contentDocument.querySelector(selector);
-      } catch (e) {
-        alert('Live preview load nahi ho saki — dobara try karo.');
-        return;
-      }
-
-      if (!targetEl) {
-        alert('Ye element live preview mein nahi mila — ho sakta hai page scan ke baad dynamically badal gaya ho.');
-        return;
-      }
-
-      setTimeout(() => {
-        targetEl.scrollIntoView({ behavior: reduceMotionPref ? 'auto' : 'smooth', block: 'center' });
-        targetEl.style.outline = '4px solid #e56f61';
-        targetEl.style.outlineOffset = '2px';
-      }, reduceMotionPref ? 0 : 150);
-    };
-    previewFrame.srcdoc = scanHtml;
-  }
-
+  // Clicking the button now sends the user to a dedicated preview screen
+  // (cleaner than a small embedded panel — more room, focused view).
   issuesList.querySelectorAll('.goto-element-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const idx = +btn.dataset.idx;
-      goToElement(issues[idx].target);
+      const issue = issues[idx];
+      sessionStorage.setItem('previewTarget', issue.target);
+      sessionStorage.setItem('previewIssueTitle', issue.title);
+      window.location.href = 'preview.html';
     });
   });
 

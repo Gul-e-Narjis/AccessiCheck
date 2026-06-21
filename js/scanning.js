@@ -1,10 +1,17 @@
 const url = sessionStorage.getItem('scanUrl');
 document.getElementById('scanningUrl').textContent = url || '';
 
+// NOTE on proxy order (based on real console testing):
+// - corsproxy.io works on 127.0.0.1/localhost (whitelisted dev origin) but
+//   has a strict rate limit — can return 429 if hit too often in a short time.
+// - codetabs wants the target URL RAW (not encodeURIComponent'd), otherwise
+//   it returns 400 Bad Request.
+// - thingproxy.freeboard.io's DNS isn't resolving anymore (service looks
+//   discontinued) — kept only as a last-ditch fallback.
 const PROXIES = [
+  (u) => `https://api.codetabs.com/v1/proxy?quest=${u}`,
   (u) => `https://corsproxy.io/?url=${encodeURIComponent(u)}`,
   (u) => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
-  (u) => `https://api.codetabs.com/v1/proxy?quest=${u}`,
   (u) => `https://thingproxy.freeboard.io/fetch/${u}`
 ];
 
@@ -17,9 +24,15 @@ async function fetchWithFallback(targetUrl) {
 
       if (response.ok) {
         const html = await response.text();
-        if (html && html.length > 100) {
+        // Some proxies (esp. corsproxy.io on a blocked origin) return a 200
+        // status but with a plain-text/JSON error message instead of the
+        // actual page — guard against treating that as a real scan target.
+        const looksLikeHtml = /<html[\s>]|<!doctype html/i.test(html);
+        if (html && html.length > 100 && looksLikeHtml) {
           console.log(`Proxy ${i + 1} worked!`);
           return html;
+        } else {
+          console.warn(`Proxy ${i + 1} returned non-HTML/blocked response, trying next...`);
         }
       }
     } catch (err) {

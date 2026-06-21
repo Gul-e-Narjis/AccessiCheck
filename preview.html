@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Element Preview | AccessiCheck</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header>
+    <div class="logo">AccessiCheck</div>
+  </header>
+
+  <main class="container preview-page">
+    <a href="results.html" class="back-link">&larr; Back to Results</a>
+
+    <h1>📍 Element Preview</h1>
+    <p class="subtitle" id="previewIssueLabel"></p>
+
+    <div class="preview-page-frame-wrap">
+      <iframe id="previewFrame" class="preview-page-frame" title="Live preview of the scanned website"></iframe>
+    </div>
+
+    <p class="preview-page-note">This is a read-only view — links and forms inside the preview are disabled.</p>
+
+    <a href="results.html" class="back-link">&larr; Back to Results</a>
+  </main>
+
+  <script src="js/preview.js"></script>
+</body>
+</html>
