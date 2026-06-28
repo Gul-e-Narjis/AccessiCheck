@@ -8,42 +8,90 @@
 </head>
 <body>
 
-  <header>
+  <header class="header-flex">
     <div class="logo">AccessiCheck</div>
   </header>
 
-  <main class="container results-page">
-    <h1>Scan Results</h1>
-    <p id="scannedUrl" class="subtitle"></p>
+  <nav class="subnav" aria-label="Report sections">
+    <a href="dashboard.html" class="subnav-pill">📊 Dashboard</a>
+    <a href="results.html" class="subnav-pill active" aria-current="page">📋 Full Report</a>
+    <a href="critical-issues.html" class="subnav-pill">🔴 Critical <span class="pill-count" id="navCriticalCount">–</span></a>
+    <a href="warnings.html" class="subnav-pill">🟠 Warnings <span class="pill-count" id="navWarningCount">–</span></a>
+    <a href="best-practices.html" class="subnav-pill">✅ Best Practices</a>
+    <a href="vision-simulator.html" class="subnav-pill">👁️ Vision Simulator</a>
+    <a href="settings.html" class="subnav-pill">⚙️ Settings</a>
+    <a href="about.html" class="subnav-pill">ℹ️ About</a>
+  </nav>
 
-    <div class="results-banner" id="resultsBanner">
-      <span class="results-banner-icon" aria-hidden="true">📊</span>
-      <img src="images/results-banner.jpg" alt="" class="results-banner-img" onerror="this.remove()">
+  <div class="results-hero-band">
+    <div class="results-hero-inner">
+      <div class="results-hero-text">
+        <p class="eyebrow">Scan Complete</p>
+        <h1 class="results-hero-title">Your Accessibility Report</h1>
+        <p class="results-hero-url" id="scannedUrl"></p>
+        <p class="results-cors-note">
+          <span class="results-cors-icon" aria-hidden="true">ℹ️</span>
+          Note: Some websites restrict external scanning due to security policies (CORS).
+        </p>
+        <div class="results-hero-btns">
+          <button type="button" id="downloadPdfBtn" class="btn-hero-pdf">
+            <span aria-hidden="true">⬇</span> Download PDF Report
+          </button>
+          <button type="button" class="btn-hero-print" onclick="window.print()" aria-label="Print this report">
+            🖨️ Print
+          </button>
+        </div>
+      </div>
+      <div class="results-hero-illustration" aria-hidden="true">
+        <svg viewBox="0 0 200 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="20" width="160" height="120" rx="12" fill="#e6f4f3" stroke="#14817b" stroke-width="2"/>
+          <rect x="36" y="38" width="80" height="10" rx="5" fill="#14817b" opacity="0.5"/>
+          <rect x="36" y="56" width="120" height="6" rx="3" fill="#14817b" opacity="0.25"/>
+          <rect x="36" y="68" width="100" height="6" rx="3" fill="#14817b" opacity="0.25"/>
+          <rect x="36" y="80" width="110" height="6" rx="3" fill="#14817b" opacity="0.25"/>
+          <rect x="36" y="96" width="70" height="28" rx="6" fill="#c0392b" opacity="0.15"/>
+          <rect x="114" y="96" width="42" height="28" rx="6" fill="#b8650b" opacity="0.15"/>
+          <circle cx="155" cy="135" r="22" fill="#14817b"/>
+          <text x="155" y="141" text-anchor="middle" font-size="20" fill="white">✓</text>
+          <circle cx="155" cy="135" r="22" fill="none" stroke="#e6f4f3" stroke-width="3" class="results-pulse-ring"/>
+        </svg>
+      </div>
     </div>
+  </div>
+
+  <main class="results-main-wrap">
 
     <!-- Summary Stats -->
-    <div class="summary-stats">
-      <div class="stat-box total">
-        <span class="stat-number" id="totalCount">0</span>
+    <div class="summary-stats results-stats-elevated">
+      <div class="stat-box total" tabindex="0">
+        <div class="stat-circle">
+          <span class="stat-number" id="totalCount">0</span>
+        </div>
         <span class="stat-label">Total Issues</span>
+        <span class="stat-hover-hint" aria-hidden="true">all issues</span>
       </div>
-      <div class="stat-box high">
-        <span class="stat-number" id="highCount">0</span>
+      <div class="stat-box high" tabindex="0">
+        <div class="stat-circle">
+          <span class="stat-number" id="highCount">0</span>
+        </div>
         <span class="stat-label">High</span>
+        <span class="stat-hover-hint" aria-hidden="true">critical &amp; serious</span>
       </div>
-      <div class="stat-box moderate">
-        <span class="stat-number" id="moderateCount">0</span>
+      <div class="stat-box moderate" tabindex="0">
+        <div class="stat-circle">
+          <span class="stat-number" id="moderateCount">0</span>
+        </div>
         <span class="stat-label">Moderate</span>
+        <span class="stat-hover-hint" aria-hidden="true">needs attention</span>
       </div>
-      <div class="stat-box minor">
-        <span class="stat-number" id="minorCount">0</span>
+      <div class="stat-box minor" tabindex="0">
+        <div class="stat-circle">
+          <span class="stat-number" id="minorCount">0</span>
+        </div>
         <span class="stat-label">Minor</span>
+        <span class="stat-hover-hint" aria-hidden="true">low priority</span>
       </div>
     </div>
-
-    <button type="button" id="downloadPdfBtn" class="btn-primary download-pdf-btn">
-      <span aria-hidden="true">⬇</span> Download Full Audit Report (PDF)
-    </button>
 
     <!-- Issues List -->
     <section id="issuesList" aria-label="Accessibility issues found"></section>
@@ -53,20 +101,18 @@
       <div class="fix-modal" role="dialog" aria-modal="true" aria-labelledby="fixModalTitle" id="fixModal">
         <button type="button" class="fix-modal-close" id="fixModalClose" aria-label="Close fix example">&times;</button>
 
-        <!-- 1. Severity badge + title -->
-        <span class="badge" id="fixModalBadge"></span>
+        <div class="fix-modal-header-row">
+          <span class="badge" id="fixModalBadge"></span>
+        </div>
         <h2 id="fixModalTitle"></h2>
 
-        <!-- 2. Fun fact / analogy -->
         <div class="fix-modal-fact">
           <span class="fix-modal-fact-icon" aria-hidden="true">💡</span>
           <p id="fixModalFact"></p>
         </div>
 
-        <!-- 3. Why it matters (WCAG reference) -->
         <p class="fix-modal-why" id="fixModalWhy"></p>
 
-        <!-- 4 & 5. Before / after code -->
         <div class="fix-compare">
           <div class="fix-block wrong">
             <span class="fix-block-label">❌ Your code</span>
@@ -78,7 +124,6 @@
           </div>
         </div>
 
-        <!-- 6. Actions -->
         <div class="fix-modal-actions">
           <button type="button" class="btn-primary" id="fixModalCopyBtn">Copy Fix</button>
           <a href="#" target="_blank" rel="noopener" class="fix-modal-learn" id="fixModalLearnLink">Learn more →</a>
@@ -87,12 +132,103 @@
       </div>
     </div>
 
-    <a href="dashboard.html" class="back-link">&larr; Back to Dashboard</a>
-    <a href="index.html" class="back-link" style="margin-left: 20px;">Scan another website</a>
+    <div class="results-bottom-links">
+      <a href="dashboard.html" class="back-link">&larr; Back to Dashboard</a>
+      <a href="index.html" class="back-link">Scan another website</a>
+    </div>
+
   </main>
 
+  <script src="js/subpage-common.js"></script>
   <script src="js/fixData.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
   <script src="js/results.js"></script>
+
+  <!-- UI Enhancement: Quick Wins + Accordion — no core logic touched -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Wait for results.js to render cards
+      requestAnimationFrame(function () {
+        setTimeout(enhanceCards, 120);
+      });
+    });
+
+    function enhanceCards() {
+      const cards = document.querySelectorAll('#issuesList .issue-card');
+      if (!cards.length) return;
+
+      cards.forEach(function (card) {
+        const isMinor = card.classList.contains('minor');
+        const isHigh = card.classList.contains('high');
+        const isModerate = card.classList.contains('moderate');
+
+        // ── Accordion: collapse description by default ──
+        const desc = card.querySelector('p');
+        const actions = card.querySelector('.issue-card-actions');
+        const h2 = card.querySelector('h2');
+        if (desc && h2) {
+          desc.classList.add('acc-body');
+          if (actions) actions.classList.add('acc-body');
+
+          // toggle button
+          const toggle = document.createElement('button');
+          toggle.className = 'acc-toggle';
+          toggle.setAttribute('aria-expanded', 'false');
+          toggle.setAttribute('aria-label', 'Expand issue details');
+          toggle.innerHTML = '<span class="acc-chevron" aria-hidden="true">▾</span>';
+          h2.appendChild(toggle);
+
+          // start collapsed
+          desc.hidden = true;
+          if (actions) actions.hidden = true;
+
+          toggle.addEventListener('click', function () {
+            const expanded = toggle.getAttribute('aria-expanded') === 'true';
+            toggle.setAttribute('aria-expanded', String(!expanded));
+            desc.hidden = expanded;
+            if (actions) actions.hidden = expanded;
+            toggle.querySelector('.acc-chevron').style.transform = expanded ? '' : 'rotate(180deg)';
+          });
+        }
+
+        // ── Quick Win badge for minor ──
+        if (isMinor) {
+          card.classList.add('issue-card--qw');
+          const badge = card.querySelector('.badge');
+          if (badge) {
+            badge.textContent = '⚡ Quick Win';
+            badge.classList.add('badge--qw');
+          }
+
+          // Improvement meter
+          const meter = document.createElement('div');
+          meter.className = 'qw-meter';
+          meter.innerHTML =
+            '<span class="qw-meter-label">Fixing this improves accessibility</span>' +
+            '<div class="qw-meter-bar" aria-hidden="true">' +
+              '<div class="qw-meter-fill"></div>' +
+            '</div>' +
+            '<span class="qw-meter-pct">+2%</span>';
+          if (desc) desc.after(meter);
+
+          // Checkbox feel
+          if (actions) {
+            const check = document.createElement('label');
+            check.className = 'qw-check';
+            check.innerHTML =
+              '<input type="checkbox" class="qw-checkbox" aria-label="Mark as done"> ' +
+              '<span class="qw-check-label">Mark as done</span>';
+            check.querySelector('input').addEventListener('change', function () {
+              card.classList.toggle('issue-card--done', this.checked);
+            });
+            actions.prepend(check);
+          }
+        }
+
+        // ── Urgency glow for high ──
+        if (isHigh) card.classList.add('issue-card--urgent');
+      });
+    }
+  </script>
 </body>
 </html>

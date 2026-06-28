@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profile — AccessiCheck</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .profile-page { min-height: 100vh; background: var(--teal-light); }
+    .profile-hero {
+      background: linear-gradient(160deg, var(--teal-dark) 0%, var(--teal-primary) 100%);
+      padding: 48px 40px 100px;
+      position: relative; overflow: hidden; text-align: center;
+    }
+    .profile-hero::before {
+      content: ""; position: absolute;
+      width: 300px; height: 300px; border-radius: 50%;
+      background: var(--accent-coral); opacity: 0.08;
+      top: -120px; right: -80px;
+    }
+    .profile-hero::after {
+      content: ""; position: absolute;
+      width: 200px; height: 200px; border-radius: 50%;
+      background: var(--accent-gold); opacity: 0.1;
+      bottom: -80px; left: -60px;
+    }
+    .profile-avatar {
+      width: 90px; height: 90px; border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      border: 3px solid rgba(255,255,255,0.5);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.2rem; margin: 0 auto 16px;
+      position: relative; z-index: 1;
+    }
+    .profile-hero h1 { color: var(--white); font-size: 1.8rem; margin-bottom: 6px; position: relative; z-index: 1; }
+    .profile-hero p { color: #d6ece9; font-size: 0.95rem; position: relative; z-index: 1; }
+
+    .profile-main {
+      max-width: 760px; margin: -50px auto 60px;
+      padding: 0 24px; position: relative; z-index: 2;
+    }
+
+    /* Stats Row */
+    .profile-stats {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 16px; margin-bottom: 24px;
+    }
+    .profile-stat-card {
+      background: var(--white); border-radius: 14px;
+      padding: 22px; text-align: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      border-top: 4px solid var(--teal-primary);
+    }
+    .profile-stat-card.coral { border-top-color: var(--accent-coral-deep); }
+    .profile-stat-card.gold { border-top-color: var(--accent-gold-deep); }
+    .profile-stat-num {
+      font-size: 2.2rem; font-weight: 800;
+      color: var(--teal-dark); display: block; margin-bottom: 4px;
+    }
+    .profile-stat-card.coral .profile-stat-num { color: var(--accent-coral-deep); }
+    .profile-stat-card.gold .profile-stat-num { color: var(--accent-gold-deep); }
+    .profile-stat-label { font-size: 0.82rem; color: var(--text-light); font-weight: 600; }
+
+    /* Info Card */
+    .profile-info-card {
+      background: var(--white); border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      overflow: hidden; margin-bottom: 20px;
+    }
+    .profile-info-header {
+      padding: 18px 24px; background: var(--teal-light);
+      border-bottom: 1px solid #d0e8e6;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .profile-info-header h2 { color: var(--teal-dark); font-size: 1rem; }
+    .profile-info-row {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--teal-light);
+      display: flex; align-items: center; gap: 16px;
+    }
+    .profile-info-row:last-child { border-bottom: none; }
+    .profile-info-icon { font-size: 1.2rem; width: 28px; text-align: center; flex-shrink: 0; }
+    .profile-info-label { font-size: 0.8rem; color: var(--text-light); margin-bottom: 2px; }
+    .profile-info-value { font-size: 0.95rem; font-weight: 600; color: var(--text-dark); }
+
+    /* Recent Scans */
+    .recent-card {
+      background: var(--white); border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      overflow: hidden; margin-bottom: 20px;
+    }
+    .recent-card-header {
+      padding: 18px 24px; background: var(--teal-light);
+      border-bottom: 1px solid #d0e8e6;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .recent-card-header h2 { color: var(--teal-dark); font-size: 1rem; }
+    .recent-scan-item {
+      padding: 14px 24px; border-bottom: 1px solid var(--teal-light);
+      display: flex; align-items: center; gap: 14px;
+    }
+    .recent-scan-item:last-child { border-bottom: none; }
+    .recent-score {
+      width: 42px; height: 42px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem; font-weight: 800; color: var(--white);
+      flex-shrink: 0;
+    }
+    .recent-score.good { background: var(--teal-primary); }
+    .recent-score.moderate { background: var(--severity-moderate); }
+    .recent-score.poor { background: var(--severity-high); }
+    .recent-url {
+      flex: 1; font-size: 0.88rem; font-weight: 600;
+      color: var(--text-dark); white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis;
+    }
+    .recent-date { font-size: 0.78rem; color: var(--text-light); flex-shrink: 0; }
+
+    /* Actions */
+    .profile-actions {
+      display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px;
+    }
+    .btn-outline-danger {
+      background: var(--white); color: var(--accent-coral-deep);
+      border: 2px solid var(--accent-coral-deep);
+      padding: 10px 20px; border-radius: 8px;
+      font-weight: 700; cursor: pointer; font-size: 0.9rem;
+      transition: all 0.15s ease;
+    }
+    .btn-outline-danger:hover { background: var(--accent-coral-deep); color: var(--white); }
+
+    .loading-state { text-align: center; padding: 40px; color: var(--text-light); }
+    .spinner {
+      width: 36px; height: 36px;
+      border: 4px solid var(--teal-light);
+      border-top: 4px solid var(--teal-primary);
+      border-radius: 50%; margin: 0 auto 12px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="profile-page">
+
+    <!-- Header -->
+    <header class="header-flex">
+      <span class="logo">♿ AccessiCheck</span>
+      <div style="display:flex; align-items:center; gap:16px;">
+        <a href="index.html" class="header-link">🏠 Home</a>
+        <a href="history.html" class="header-link">📋 History</a>
+        <span class="header-link" id="headerUser"></span>
+        <button onclick="logout()" class="header-link" style="background:none;border:none;cursor:pointer;color:white;font-weight:600;">Logout</button>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <div class="profile-hero">
+      <div class="profile-avatar" id="avatarEl">👤</div>
+      <h1 id="heroName">Loading...</h1>
+      <p id="heroEmail">—</p>
+    </div>
+
+    <!-- Main -->
+    <div class="profile-main">
+
+      <!-- Stats -->
+      <div class="profile-stats">
+        <div class="profile-stat-card">
+          <span class="profile-stat-num" id="totalScans">—</span>
+          <span class="profile-stat-label">Total Scans</span>
+        </div>
+        <div class="profile-stat-card coral">
+          <span class="profile-stat-num" id="avgScore">—</span>
+          <span class="profile-stat-label">Avg Score</span>
+        </div>
+        <div class="profile-stat-card gold">
+          <span class="profile-stat-num" id="memberSince">—</span>
+          <span class="profile-stat-label">Member Since</span>
+        </div>
+      </div>
+
+      <!-- Info Card -->
+      <div class="profile-info-card">
+        <div class="profile-info-header">
+          <span>👤</span>
+          <h2>Account Information</h2>
+        </div>
+        <div class="profile-info-row">
+          <span class="profile-info-icon">✏️</span>
+          <div>
+            <div class="profile-info-label">Full Name</div>
+            <div class="profile-info-value" id="infoName">—</div>
+          </div>
+        </div>
+        <div class="profile-info-row">
+          <span class="profile-info-icon">📧</span>
+          <div>
+            <div class="profile-info-label">Email Address</div>
+            <div class="profile-info-value" id="infoEmail">—</div>
+          </div>
+        </div>
+        <div class="profile-info-row">
+          <span class="profile-info-icon">📅</span>
+          <div>
+            <div class="profile-info-label">Account Created</div>
+            <div class="profile-info-value" id="infoCreated">—</div>
+          </div>
+        </div>
+        <div class="profile-info-row">
+          <span class="profile-info-icon">🔒</span>
+          <div>
+            <div class="profile-info-label">Password</div>
+            <div class="profile-info-value">••••••••</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Scans -->
+      <div class="recent-card">
+        <div class="recent-card-header">
+          <h2>🕐 Recent Scans</h2>
+          <a href="history.html" class="header-link" style="color: var(--teal-primary); font-size: 0.85rem;">View All →</a>
+        </div>
+        <div id="recentScans">
+          <div class="loading-state">
+            <div class="spinner"></div>
+            <p>Loading...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="profile-actions">
+        <a href="history.html" class="btn-primary" style="text-decoration:none; display:inline-block; padding:10px 22px; border-radius:8px; font-size:0.9rem;">
+          📋 View Full History
+        </a>
+        <a href="index.html" class="btn-secondary" style="display:inline-block; padding:10px 22px; border-radius:8px; font-size:0.9rem;">
+          🔍 New Scan
+        </a>
+        <button class="btn-outline-danger" onclick="logout()">🚪 Logout</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:5000/api';
+    const token = localStorage.getItem('ac_token');
+    const user = JSON.parse(localStorage.getItem('ac_user') || 'null');
+
+    if (!token) window.location.href = 'login.html';
+    if (user) {
+      document.getElementById('headerUser').textContent = user.name;
+    }
+
+    function logout() {
+      localStorage.removeItem('ac_token');
+      localStorage.removeItem('ac_user');
+      window.location.href = 'login.html';
+    }
+
+    function getScoreClass(score) {
+      if (score >= 80) return 'good';
+      if (score >= 50) return 'moderate';
+      return 'poor';
+    }
+
+    function formatDate(dateStr) {
+      return new Date(dateStr).toLocaleDateString('en-PK', {
+        day: 'numeric', month: 'short', year: 'numeric'
+      });
+    }
+
+    function getInitials(name) {
+      return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    }
+
+    async function loadProfile() {
+      try {
+        const res = await fetch(`${API_BASE}/auth/profile`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        const { user, stats } = data;
+
+        // Hero
+        document.getElementById('avatarEl').textContent = getInitials(user.name);
+        document.getElementById('heroName').textContent = user.name;
+        document.getElementById('heroEmail').textContent = user.email;
+
+        // Stats
+        document.getElementById('totalScans').textContent = stats.totalScans;
+
+        // Avg score
+        if (stats.recentScans.length) {
+          const avg = Math.round(
+            stats.recentScans.reduce((s, sc) => s + sc.score, 0) / stats.recentScans.length
+          );
+          document.getElementById('avgScore').textContent = avg;
+        } else {
+          document.getElementById('avgScore').textContent = 'N/A';
+        }
+
+        // Member since
+        document.getElementById('memberSince').textContent =
+          new Date(user.createdAt).toLocaleDateString('en-PK', { month: 'short', year: 'numeric' });
+
+        // Info
+        document.getElementById('infoName').textContent = user.name;
+        document.getElementById('infoEmail').textContent = user.email;
+        document.getElementById('infoCreated').textContent = formatDate(user.createdAt);
+
+        // Recent scans
+        const recentEl = document.getElementById('recentScans');
+        if (!stats.recentScans.length) {
+          recentEl.innerHTML = `
+            <div class="loading-state">
+              <p>No scans yet — <a href="index.html" style="color:var(--teal-primary);font-weight:700;">scan a website!</a></p>
+            </div>`;
+        } else {
+          recentEl.innerHTML = stats.recentScans.map(scan => `
+            <div class="recent-scan-item">
+              <div class="recent-score ${getScoreClass(scan.score)}">${scan.score}</div>
+              <div class="recent-url">${scan.url}</div>
+              <div class="recent-date">${formatDate(scan.scanDate)}</div>
+            </div>
+          `).join('');
+        }
+
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    loadProfile();
+  </script>
+</body>
+</html>

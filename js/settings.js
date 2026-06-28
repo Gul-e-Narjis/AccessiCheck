@@ -1,13 +1,6 @@
 const url = sessionStorage.getItem('scanUrl');
 document.getElementById('scanningUrl').textContent = url || '';
 
-// NOTE on proxy order (based on real console testing):
-// - corsproxy.io works on 127.0.0.1/localhost (whitelisted dev origin) but
-//   has a strict rate limit — can return 429 if hit too often in a short time.
-// - codetabs wants the target URL RAW (not encodeURIComponent'd), otherwise
-//   it returns 400 Bad Request.
-// - thingproxy.freeboard.io's DNS isn't resolving anymore (service looks
-//   discontinued) — kept only as a last-ditch fallback.
 const PROXIES = [
   (u) => `https://api.codetabs.com/v1/proxy?quest=${u}`,
   (u) => `https://corsproxy.io/?url=${encodeURIComponent(u)}`,
@@ -21,12 +14,8 @@ async function fetchWithFallback(targetUrl) {
       const proxyUrl = PROXIES[i](targetUrl);
       console.log(`Trying proxy ${i + 1}...`, proxyUrl);
       const response = await fetch(proxyUrl);
-
       if (response.ok) {
         const html = await response.text();
-        // Some proxies (esp. corsproxy.io on a blocked origin) return a 200
-        // status but with a plain-text/JSON error message instead of the
-        // actual page — guard against treating that as a real scan target.
         const looksLikeHtml = /<html[\s>]|<!doctype html/i.test(html);
         if (html && html.length > 100 && looksLikeHtml) {
           console.log(`Proxy ${i + 1} worked!`);
@@ -52,13 +41,11 @@ function finishScan(error, violations, cleanHtml) {
     try {
       sessionStorage.setItem('scanHtml', cleanHtml || '');
     } catch (e) {
-      console.warn('Could not store scanHtml (quota exceeded) — live preview will be unavailable.', e);
+      console.warn('Could not store scanHtml (quota exceeded)', e);
       sessionStorage.removeItem('scanHtml');
     }
 
-    // ── Backend mein save karo (additive — core logic untouched) ──
-  // ── Backend mein save karo (additive — core logic untouched) ──
-// Backend mein frontend results save karo
+    // Backend mein save karo — frontend results
     const token = localStorage.getItem('ac_token');
     if (token && violations) {
       const critical = violations.filter(v => v.impact === 'critical' || v.impact === 'serious').length;
@@ -81,15 +68,8 @@ function finishScan(error, violations, cleanHtml) {
 
 async function runScan() {
   try {
-    // Optional WCAG-level preference from the new Settings screen.
-    // Defaults to axe-core's full default rule set (identical to prior
-    // behavior) when no preference has been saved — nothing changes
-    // unless the user explicitly picks a level in Settings.
-    // Only A and AA are supported (AAA removed from UI — fall back to AA if stale value found)
     const rawLevel = localStorage.getItem('ac_wcag_level') || 'aa';
     const wcagLevel = (rawLevel === 'a') ? 'a' : 'aa';
-    // 'best-practice' is ALWAYS included regardless of WCAG level —
-    // removing it caused sites with only best-practice violations to show 0 issues / score 100.
     const wcagTagMap = {
       a:  ['wcag2a', 'wcag21a', 'best-practice'],
       aa: ['wcag2a', 'wcag21a', 'wcag2aa', 'wcag21aa', 'best-practice']
@@ -100,12 +80,8 @@ async function runScan() {
 
     let html = await fetchWithFallback(url);
     html = html.replace(/<head>/i, `<head><base href="${url}">`);
-
-    // Strip Content-Security-Policy meta tags — they can block axe-core loading
-    // from cdnjs.cloudflare.com, causing a silent scan failure (0 violations → score 100).
     html = html.replace(/<meta[^>]+http-equiv=["']?content-security-policy["']?[^>]*>/gi, '');
 
-    // Keep an unmodified copy (no scanner script) for the live preview iframe
     const cleanHtml = html;
 
     const scannerScriptTag = `
@@ -114,8 +90,6 @@ async function runScan() {
           var axeScript = document.createElement('script');
           axeScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.9.1/axe.min.js';
           axeScript.onload = function() {
-            // 500ms delay — lets the page's own scripts initialize before axe scans,
-            // preventing SPAs / JS-rendered sites from showing 0 violations.
             setTimeout(function() {
               axe.run(document, ${JSON.stringify(axeOptions)}, function(err, results) {
                 if (err) {

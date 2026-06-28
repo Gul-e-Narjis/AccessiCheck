@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings | AccessiCheck</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header>
+    <div class="logo">AccessiCheck</div>
+    <a href="onboarding.html" class="header-link">How it works</a>
+  </header>
+
+  <nav class="subnav" aria-label="Report sections">
+    <a href="dashboard.html" class="subnav-pill">📊 Dashboard</a>
+    <a href="results.html" class="subnav-pill">📋 Full Report</a>
+    <a href="critical-issues.html" class="subnav-pill">🔴 Critical <span class="pill-count" id="navCriticalCount">–</span></a>
+    <a href="warnings.html" class="subnav-pill">🟠 Warnings <span class="pill-count" id="navWarningCount">–</span></a>
+    <a href="best-practices.html" class="subnav-pill">✅ Best Practices</a>
+    <a href="vision-simulator.html" class="subnav-pill">👁️ Vision Simulator</a>
+    <a href="settings.html" class="subnav-pill active" aria-current="page">⚙️ Settings</a>
+    <a href="about.html" class="subnav-pill">ℹ️ About</a>
+  </nav>
+
+  <main class="subpage">
+    <section class="page-hero">
+      <img src="images/settings-hero.jpg" alt="" class="page-hero-img" onerror="this.style.display='none'">
+      <div class="page-hero-content">
+        <span class="page-hero-eyebrow">⚙️ Make it yours</span>
+        <h1>Settings</h1>
+        <p>Choose how strict your scans are, set your motion preference, and manage what AccessiCheck remembers on this device.</p>
+      </div>
+    </section>
+
+    <div class="subpage-body">
+
+      <div class="settings-card reveal">
+        <h2>
+          WCAG Conformance Level
+          <button type="button" class="info-btn" aria-label="What is a WCAG level?">?</button>
+          <span class="info-pop">WCAG has two main levels: A (minimum) and AA (the standard most laws require, like ADA/EN 301 549). AA is the recommended default and what AccessiCheck uses by default.</span>
+        </h2>
+        <p class="settings-card-desc">Controls which rules axe-core checks on your next scan.</p>
+        <div class="wcag-options">
+          <button type="button" class="wcag-option" data-level="a">
+            <strong>Level A</strong>
+            <span>Minimum — basic barriers removed</span>
+          </button>
+          <button type="button" class="wcag-option" data-level="aa">
+            <strong>Level AA</strong>
+            <span>Recommended — the legal standard</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="settings-card danger-card reveal">
+        <h2>Scan History</h2>
+        <p class="settings-card-desc" id="historyCount">No scan history saved yet.</p>
+        <button type="button" class="btn-danger" id="clearHistoryBtn">Clear Scan History</button>
+      </div>
+
+      <div class="cta-banner reveal">
+        <div>
+          <h3>Ready to scan with these settings?</h3>
+          <p>Your WCAG level applies starting with your next scan.</p>
+        </div>
+        <a href="index.html" class="btn-primary">Start a New Scan →</a>
+      </div>
+
+    </div>
+  </main>
+
+  <button type="button" class="fab-top" id="fabTop" aria-label="Scroll to top">↑</button>
+
+  <script src="js/subpage-common.js"></script>
+  <script src="js/settings.js"></script>
+</body>
+</html>

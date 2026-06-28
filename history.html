@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Scan History — AccessiCheck</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .history-page { min-height: 100vh; background: var(--teal-light); }
+    .history-hero {
+      background: linear-gradient(160deg, var(--teal-dark) 0%, var(--teal-primary) 100%);
+      padding: 48px 40px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .history-hero::before {
+      content: ""; position: absolute;
+      width: 300px; height: 300px; border-radius: 50%;
+      background: var(--accent-coral); opacity: 0.08;
+      top: -120px; right: -80px;
+    }
+    .history-hero-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
+    .history-hero h1 { color: var(--white); font-size: 2rem; margin-bottom: 8px; }
+    .history-hero p { color: #d6ece9; font-size: 1rem; }
+    .history-main {
+      max-width: 900px; margin: -44px auto 60px;
+      padding: 0 24px; position: relative; z-index: 2;
+    }
+    .history-card {
+      background: var(--white); border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.10); overflow: hidden;
+    }
+    .history-card-header {
+      padding: 22px 28px; border-bottom: 1px solid var(--teal-light);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .history-card-header h2 { color: var(--teal-dark); font-size: 1.1rem; }
+    .scan-count {
+      background: var(--teal-light); color: var(--teal-dark);
+      font-size: 0.8rem; font-weight: 700;
+      padding: 4px 12px; border-radius: 999px;
+    }
+    .history-item {
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--teal-light);
+      display: flex; align-items: center; gap: 18px;
+      transition: background 0.15s ease;
+      cursor: pointer;
+    }
+    .history-item:hover { background: var(--teal-light); }
+    .history-item:last-child { border-bottom: none; }
+    .score-circle {
+      width: 54px; height: 54px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; font-weight: 800; flex-shrink: 0;
+      color: var(--white);
+    }
+    .score-circle.good { background: var(--teal-primary); }
+    .score-circle.moderate { background: var(--severity-moderate); }
+    .score-circle.poor { background: var(--severity-high); }
+    .history-item-info { flex: 1; min-width: 0; }
+    .history-item-url {
+      font-weight: 600; color: var(--text-dark);
+      font-size: 0.95rem; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis;
+      margin-bottom: 4px;
+    }
+    .history-item-meta { font-size: 0.82rem; color: var(--text-light); }
+    .history-item-badges { display: flex; gap: 8px; flex-shrink: 0; }
+    .mini-badge {
+      font-size: 0.75rem; font-weight: 700;
+      padding: 3px 10px; border-radius: 999px;
+    }
+    .mini-badge.critical { background: var(--severity-high-bg); color: var(--severity-high); }
+    .mini-badge.moderate { background: var(--severity-moderate-bg); color: var(--severity-moderate); }
+    .mini-badge.minor { background: var(--severity-minor-bg); color: var(--severity-minor); }
+    .empty-history {
+      text-align: center; padding: 60px 30px;
+    }
+    .empty-history .big-icon { font-size: 3rem; margin-bottom: 16px; }
+    .empty-history h3 { color: var(--teal-dark); margin-bottom: 8px; }
+    .empty-history p { color: var(--text-light); margin-bottom: 20px; }
+    .loading-state { text-align: center; padding: 60px 30px; color: var(--text-light); }
+    .spinner {
+      width: 40px; height: 40px;
+      border: 4px solid var(--teal-light);
+      border-top: 4px solid var(--teal-primary);
+      border-radius: 50%; margin: 0 auto 16px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="history-page">
+
+    <header class="header-flex">
+      <span class="logo">♿ AccessiCheck</span>
+      <div style="display:flex; align-items:center; gap:16px;">
+        <a href="index.html" class="header-link">🏠 Home</a>
+        <a href="profile.html" class="header-link">👤 Profile</a>
+        <span class="header-link" id="headerUser"></span>
+        <button onclick="logout()" class="header-link" style="background:none;border:none;cursor:pointer;color:white;font-weight:600;">Logout</button>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <div class="history-hero">
+      <div class="history-hero-inner">
+        <h1>📋 Scan History</h1>
+        <p>All your previous accessibility scans in one place</p>
+      </div>
+    </div>
+
+    <!-- Main -->
+    <div class="history-main">
+      <div class="history-card">
+        <div class="history-card-header">
+          <h2>Previous Scans</h2>
+          <span class="scan-count" id="scanCount">Loading...</span>
+        </div>
+        <div id="historyList">
+          <div class="loading-state">
+            <div class="spinner"></div>
+            <p>Loading your scan history...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+   const API_BASE = 'http://localhost:5000/api';
+    const token = localStorage.getItem('ac_token');
+    const user = JSON.parse(localStorage.getItem('ac_user') || 'null');
+
+    // Auth check
+    if (!token) window.location.href = 'login.html';
+
+    if (user) {
+      document.getElementById('headerUser').textContent = user.name;
+    }
+
+    function logout() {
+      localStorage.removeItem('ac_token');
+      localStorage.removeItem('ac_user');
+      window.location.href = 'login.html';
+    }
+
+    function getScoreClass(score) {
+      if (score >= 80) return 'good';
+      if (score >= 50) return 'moderate';
+      return 'poor';
+    }
+
+    function formatDate(dateStr) {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('en-PK', {
+        day: 'numeric', month: 'short', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      });
+    }
+
+    async function loadHistory() {
+      try {
+        const res = await fetch(`${API_BASE}/scan/history`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const scans = await res.json();
+
+        const list = document.getElementById('historyList');
+        const countEl = document.getElementById('scanCount');
+
+        if (!scans.length) {
+          countEl.textContent = '0 scans';
+          list.innerHTML = `
+            <div class="empty-history">
+              <div class="big-icon">🔍</div>
+              <h3>No scans yet!</h3>
+              <p>Run your first accessibility scan to see results here.</p>
+              <a href="index.html" class="btn-primary" style="text-decoration:none; display:inline-block; padding: 12px 24px; border-radius:8px;">Scan a Website</a>
+            </div>`;
+          return;
+        }
+
+        countEl.textContent = `${scans.length} scan${scans.length > 1 ? 's' : ''}`;
+
+        list.innerHTML = scans.map(scan => `
+          <div class="history-item" onclick="viewScan('${scan._id}')">
+            <div class="score-circle ${getScoreClass(scan.score)}">
+              ${scan.score}
+            </div>
+            <div class="history-item-info">
+              <div class="history-item-url">${scan.url}</div>
+              <div class="history-item-meta">📅 ${formatDate(scan.scanDate)}</div>
+            </div>
+            <div class="history-item-badges">
+              <span class="mini-badge critical">🔴 ${scan.critical} Critical</span>
+              <span class="mini-badge moderate">🟠 ${scan.moderate} Moderate</span>
+              <span class="mini-badge minor">🔵 ${scan.minor} Minor</span>
+            </div>
+          </div>
+        `).join('');
+
+      } catch (err) {
+        document.getElementById('historyList').innerHTML = `
+          <div class="empty-history">
+            <div class="big-icon">⚠️</div>
+            <h3>Could not load history</h3>
+            <p>Make sure backend is running.</p>
+          </div>`;
+      }
+    }
+
+    function viewScan(id) {
+      sessionStorage.setItem('viewScanId', id);
+      window.location.href = 'dashboard.html';
+    }
+
+    loadHistory();
+  </script>
+</body>
+</html>

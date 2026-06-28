@@ -80,6 +80,7 @@ if (scanError === 'true') {
     issues.forEach((issue, idx) => {
       const card = document.createElement('div');
       card.className = `issue-card ${issue.severity}`;
+      card.id = `issue-${idx}`; // lets Critical/Warnings screens deep-link here
 
       const gotoBtn = (previewAvailable && issue.target)
         ? `<button type="button" class="goto-element-btn" data-idx="${idx}">📍 Go to Element</button>`
@@ -420,3 +421,23 @@ if (scanError === 'true') {
     downloadBtn.addEventListener('click', generatePDF);
   }
 }
+
+// ── Deep-link focus (additive, new) ──
+// Lets Critical Issues / Warnings List screens send the user straight to a
+// specific issue card here, scrolled into view and briefly highlighted.
+// Reads a sessionStorage flag set by those pages; does not touch any
+// existing scan/report logic above.
+(function () {
+  const focusId = sessionStorage.getItem('focusIssueId');
+  if (!focusId) return;
+  sessionStorage.removeItem('focusIssueId');
+  window.addEventListener('load', () => {
+    const target = document.getElementById(focusId);
+    if (!target) return;
+    setTimeout(() => {
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      target.classList.add('issue-card--focused');
+      setTimeout(() => target.classList.remove('issue-card--focused'), 2200);
+    }, 150);
+  });
+})();

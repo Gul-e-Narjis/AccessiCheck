@@ -9,9 +9,24 @@
 <body>
 
   <header>
-    <div class="logo">AccessiCheck</div>
+  <div class="logo">♿ AccessiCheck</div>
+  <div style="display:flex; align-items:center; gap:16px;">
     <a href="onboarding.html" class="header-link">How it works</a>
-  </header>
+    <div id="authSection"></div>
+  </div>
+</header>
+
+  <nav class="subnav" aria-label="Report sections">
+    <a href="dashboard.html" class="subnav-pill">📊 Dashboard</a>
+    <a href="results.html" class="subnav-pill">📋 Full Report</a>
+    <a href="critical-issues.html" class="subnav-pill">🔴 Critical <span class="pill-count" id="navCriticalCount">–</span></a>
+    <a href="warnings.html" class="subnav-pill">🟠 Warnings <span class="pill-count" id="navWarningCount">–</span></a>
+    <a href="best-practices.html" class="subnav-pill">✅ Best Practices</a>
+    <a href="vision-simulator.html" class="subnav-pill">👁️ Vision Simulator</a>
+    <a href="settings.html" class="subnav-pill">⚙️ Settings</a>
+    <a href="about.html" class="subnav-pill">ℹ️ About</a>
+  </nav>
+
 
   <section class="hero">
     <div class="hero-inner">
@@ -134,6 +149,7 @@
     </div>
   </section>
 
+  <script src="js/subpage-common.js"></script>
   <script src="js/script.js"></script>
 
   <!-- Auto-redirect to onboarding on first visit -->
@@ -142,5 +158,30 @@
       window.location.replace('onboarding.html');
     }
   </script>
+  <script>
+  // Auth header
+  const user = JSON.parse(localStorage.getItem('ac_user') || 'null');
+  const authSection = document.getElementById('authSection');
+ if (user) {
+    authSection.innerHTML = `
+      <a href="history.html" class="header-link" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);padding:7px 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.25);transition:all 0.2s ease;">📋 History</a>
+      <a href="profile.html" style="display:inline-flex;align-items:center;gap:7px;background:var(--accent-coral-deep);color:white;padding:8px 16px;border-radius:999px;font-weight:700;font-size:0.88rem;text-decoration:none;transition:all 0.2s ease;">
+        <span style="width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,0.2);display:inline-flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:800;">${user.name.charAt(0).toUpperCase()}</span>
+        ${user.name.split(' ')[0]}
+      </a>
+      <button onclick="logout()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);color:white;padding:7px 14px;border-radius:999px;font-weight:600;font-size:0.85rem;cursor:pointer;transition:all 0.2s ease;">Logout</button>
+    `;
+  } else {
+    authSection.innerHTML = `
+      <a href="login.html" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);color:white;padding:7px 16px;border-radius:999px;font-weight:600;font-size:0.88rem;text-decoration:none;border:1px solid rgba(255,255,255,0.25);">Login</a>
+      <a href="register.html" style="display:inline-flex;align-items:center;gap:6px;background:var(--accent-coral-deep);color:white;padding:8px 16px;border-radius:999px;font-weight:700;font-size:0.88rem;text-decoration:none;">Get Started →</a>
+    `;
+  }
+  function logout() {
+    localStorage.removeItem('ac_token');
+    localStorage.removeItem('ac_user');
+    window.location.href = 'login.html';
+  }
+</script>
 </body>
 </html>

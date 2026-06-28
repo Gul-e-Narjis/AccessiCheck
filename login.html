@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login — AccessiCheck</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .auth-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: var(--teal-light);
+    }
+    .auth-hero {
+      background: linear-gradient(160deg, var(--teal-dark) 0%, var(--teal-primary) 100%);
+      padding: 48px 40px 80px;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+    .auth-hero::before {
+      content: "";
+      position: absolute;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: var(--accent-coral);
+      opacity: 0.1;
+      top: -120px; right: -80px;
+    }
+    .auth-hero::after {
+      content: "";
+      position: absolute;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: var(--accent-gold);
+      opacity: 0.1;
+      bottom: -80px; left: -60px;
+    }
+    .auth-hero h1 {
+      color: var(--white);
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+    .auth-hero p {
+      color: #d6ece9;
+      font-size: 1rem;
+    }
+    .auth-card {
+      background: var(--white);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      padding: 36px;
+      max-width: 460px;
+      width: 100%;
+      margin: -44px auto 60px;
+      position: relative;
+      z-index: 2;
+    }
+    .auth-card h2 {
+      color: var(--teal-dark);
+      font-size: 1.4rem;
+      margin-bottom: 6px;
+    }
+    .auth-card .subtitle {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      margin-bottom: 28px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 13px 16px;
+      font-size: 1rem;
+      border: 2px solid #d0e8e6;
+      border-radius: 10px;
+      outline: none;
+      transition: border-color 0.2s ease;
+      font-family: inherit;
+      color: var(--text-dark);
+    }
+    .form-group input:focus {
+      border-color: var(--teal-primary);
+      outline: 3px solid var(--focus-ring);
+      outline-offset: 2px;
+    }
+    .form-group input::placeholder {
+      color: #aaa;
+    }
+    .btn-auth {
+      width: 100%;
+      background: var(--teal-primary);
+      color: var(--white);
+      border: none;
+      padding: 14px;
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.15s ease;
+      font-family: inherit;
+      margin-top: 6px;
+    }
+    .btn-auth:hover {
+      background: var(--teal-dark);
+      transform: translateY(-1px);
+    }
+    .btn-auth:focus {
+      outline: 3px solid var(--focus-ring);
+      outline-offset: 2px;
+    }
+    .btn-auth:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .auth-divider {
+      text-align: center;
+      margin: 22px 0;
+      position: relative;
+      color: var(--text-light);
+      font-size: 0.85rem;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 42%;
+      height: 1px;
+      background: #e0eeec;
+    }
+    .auth-divider::before { left: 0; }
+    .auth-divider::after { right: 0; }
+    .auth-link-row {
+      text-align: center;
+      font-size: 0.92rem;
+      color: var(--text-light);
+    }
+    .auth-link-row a {
+      color: var(--teal-primary);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .auth-link-row a:hover { text-decoration: underline; }
+    .error-msg {
+      background: #fce8e6;
+      color: var(--error);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 18px;
+      display: none;
+    }
+    .error-msg.show { display: block; }
+    .success-msg {
+      background: var(--teal-light);
+      color: var(--teal-dark);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 18px;
+      display: none;
+    }
+    .success-msg.show { display: block; }
+  </style>
+</head>
+<body>
+  <div class="auth-page">
+
+    <!-- Header -->
+    <header>
+      <div style="display:flex; align-items:center; justify-content:space-between; max-width:1080px; margin:0 auto;">
+        <span class="logo">♿ AccessiCheck</span>
+        <a href="index.html" class="header-link">← Back to Home</a>
+      </div>
+    </header>
+
+    <!-- Hero Band -->
+    <div class="auth-hero">
+      <h1>Welcome Back</h1>
+      <p>Login to view your scan history and reports</p>
+    </div>
+
+    <!-- Login Card -->
+    <div class="auth-card">
+      <h2>Login to your account</h2>
+      <p class="subtitle">Enter your credentials to continue</p>
+
+      <div class="error-msg" id="errorMsg" role="alert"></div>
+      <div class="success-msg" id="successMsg" role="status"></div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          type="email"
+          id="email"
+          placeholder="you@example.com"
+          autocomplete="email"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          placeholder="Enter your password"
+          autocomplete="current-password"
+          required
+        />
+      </div>
+
+      <button class="btn-auth" id="loginBtn" onclick="handleLogin()">
+        Login
+      </button>
+
+      <div class="auth-divider">or</div>
+
+      <div class="auth-link-row">
+        Don't have an account?
+        <a href="register.html">Create one here</a>
+      </div>
+    </div>
+
+  </div>
+
+  <script>const API_BASE = 'http://localhost:5000/api';
+    async function handleLogin() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const btn = document.getElementById('loginBtn');
+      const errorMsg = document.getElementById('errorMsg');
+      const successMsg = document.getElementById('successMsg');
+
+      // Reset messages
+      errorMsg.classList.remove('show');
+      successMsg.classList.remove('show');
+
+      // Validate
+      if (!email || !password) {
+        errorMsg.textContent = 'Please fill in all fields.';
+        errorMsg.classList.add('show');
+        return;
+      }
+
+      // Loading state
+      btn.disabled = true;
+      btn.textContent = 'Logging in...';
+
+      try {
+        const res = await fetch(`${API_BASE}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          errorMsg.textContent = data.message || 'Login failed.';
+          errorMsg.classList.add('show');
+          return;
+        }
+
+        // Save token and user info
+        localStorage.setItem('ac_token', data.token);
+        localStorage.setItem('ac_user', JSON.stringify(data.user));
+
+        successMsg.textContent = `Welcome back, ${data.user.name}! Redirecting...`;
+        successMsg.classList.add('show');
+
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 1200);
+
+      } catch (err) {
+        errorMsg.textContent = 'Could not connect to server. Make sure backend is running.';
+        errorMsg.classList.add('show');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Login';
+      }
+    }
+
+    // Allow Enter key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') handleLogin();
+    });
+
+    // If already logged in, redirect
+    if (localStorage.getItem('ac_token')) {
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Critical Issues | AccessiCheck</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header>
+    <div class="logo">AccessiCheck</div>
+    <a href="onboarding.html" class="header-link">How it works</a>
+  </header>
+
+  <nav class="subnav" aria-label="Report sections">
+    <a href="dashboard.html" class="subnav-pill">📊 Dashboard</a>
+    <a href="results.html" class="subnav-pill">📋 Full Report</a>
+    <a href="critical-issues.html" class="subnav-pill active" aria-current="page">🔴 Critical <span class="pill-count" id="navCriticalCount">–</span></a>
+    <a href="warnings.html" class="subnav-pill">🟠 Warnings <span class="pill-count" id="navWarningCount">–</span></a>
+    <a href="best-practices.html" class="subnav-pill">✅ Best Practices</a>
+    <a href="vision-simulator.html" class="subnav-pill">👁️ Vision Simulator</a>
+    <a href="settings.html" class="subnav-pill">⚙️ Settings</a>
+    <a href="about.html" class="subnav-pill">ℹ️ About</a>
+  </nav>
+
+  <main class="subpage">
+    <section class="page-hero">
+      <img src="images/critical-issues-hero.jpg" alt="" class="page-hero-img" onerror="this.style.display='none'">
+      <div class="page-hero-content">
+        <span class="page-hero-eyebrow">🔴 Severity: High</span>
+        <h1>Critical Issues</h1>
+        <p>These block real people from using the page — screen reader users, keyboard-only users, and people with low vision are hit hardest by these. Fix these first.</p>
+      </div>
+    </section>
+
+    <div class="subpage-body">
+
+      <h2 class="sr-only">Critical issue list</h2>
+
+      <div class="summary-strip summary-strip--high reveal" id="summaryStrip">
+        <div class="summary-strip-count">
+          <span class="num" id="criticalCount">0</span>
+          <span>critical issue(s) found</span>
+        </div>
+        <span class="summary-strip-url" id="scannedUrlTag"></span>
+      </div>
+
+      <div id="criticalList"></div>
+
+      <div class="empty-state reveal" id="emptyState" hidden>
+        <div class="big-icon">🎉</div>
+        <h2>No critical issues!</h2>
+        <p>Nothing high-severity was found on this scan. Check the Warnings tab for moderate-priority items.</p>
+        <a href="warnings.html" class="btn-secondary">View Warnings →</a>
+      </div>
+
+      <div class="no-scan-state reveal" id="noScanState" hidden>
+        <div class="big-icon">🔍</div>
+        <h2>No scan results yet</h2>
+        <p>Run a scan first, then come back here to see your critical issues.</p>
+        <a href="index.html" class="btn-primary">Scan a website</a>
+      </div>
+
+      <div class="cta-banner reveal">
+        <div>
+          <h3>Ready to fix these?</h3>
+          <p>Open the Full Report for step-by-step fixes, code examples, and the live element preview.</p>
+        </div>
+        <a href="results.html" class="btn-primary">Open Full Report →</a>
+      </div>
+
+    </div>
+  </main>
+
+  <button type="button" class="fab-top" id="fabTop" aria-label="Scroll to top">↑</button>
+
+  <script src="js/subpage-common.js"></script>
+  <script src="js/critical-issues.js"></script>
+</body>
+</html>

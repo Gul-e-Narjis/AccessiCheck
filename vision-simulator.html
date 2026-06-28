@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vision Simulator | AccessiCheck</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Hidden SVG filter defs: standard color-vision-deficiency simulation matrices -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <filter id="vsProtanopia">
+        <feColorMatrix type="matrix" values="
+          0.567 0.433 0     0 0
+          0.558 0.442 0     0 0
+          0     0.242 0.758 0 0
+          0     0     0     1 0" />
+      </filter>
+      <filter id="vsDeuteranopia">
+        <feColorMatrix type="matrix" values="
+          0.625 0.375 0   0 0
+          0.7   0.3   0   0 0
+          0     0.3   0.7 0 0
+          0     0     0   1 0" />
+      </filter>
+      <filter id="vsTritanopia">
+        <feColorMatrix type="matrix" values="
+          0.95 0.05  0     0 0
+          0    0.433 0.567 0 0
+          0    0.475 0.525 0 0
+          0    0     0     1 0" />
+      </filter>
+    </defs>
+  </svg>
+
+  <header>
+    <div class="logo">AccessiCheck</div>
+    <a href="onboarding.html" class="header-link">How it works</a>
+  </header>
+
+  <nav class="subnav" aria-label="Report sections">
+    <a href="dashboard.html" class="subnav-pill">📊 Dashboard</a>
+    <a href="results.html" class="subnav-pill">📋 Full Report</a>
+    <a href="critical-issues.html" class="subnav-pill">🔴 Critical <span class="pill-count" id="navCriticalCount">–</span></a>
+    <a href="warnings.html" class="subnav-pill">🟠 Warnings <span class="pill-count" id="navWarningCount">–</span></a>
+    <a href="best-practices.html" class="subnav-pill">✅ Best Practices</a>
+    <a href="vision-simulator.html" class="subnav-pill active" aria-current="page">👁️ Vision Simulator</a>
+    <a href="settings.html" class="subnav-pill">⚙️ Settings</a>
+    <a href="about.html" class="subnav-pill">ℹ️ About</a>
+  </nav>
+
+  <main class="subpage">
+    <section class="page-hero">
+      <img src="images/vision-simulator-hero.jpg" alt="" class="page-hero-img" onerror="this.style.display='none'">
+      <div class="page-hero-content">
+        <span class="page-hero-eyebrow">👁️ See it their way</span>
+        <h1>Vision Simulator</h1>
+        <p>1 in 12 men and 1 in 200 women have some form of color blindness. See your scanned page the way they — and people with low vision — actually experience it.</p>
+      </div>
+    </section>
+
+    <div class="subpage-body">
+
+      <h2 class="sr-only">Vision simulation tool</h2>
+
+      <div class="vs-stats-row reveal">
+        <div class="vs-stat-pill"><strong>8%</strong>of men have red-green color blindness</div>
+        <div class="vs-stat-pill"><strong>2.2B</strong>people live with some vision impairment (WHO)</div>
+        <div class="vs-stat-pill"><strong>1 in 12</strong>can't distinguish red/green CTAs reliably</div>
+      </div>
+
+      <div id="simulatorArea" class="reveal">
+        <div class="vs-toggle-row" id="vsToggleRow" role="group" aria-label="Vision simulation mode">
+          <button type="button" class="vs-toggle-btn active" data-mode="normal" aria-pressed="true">
+            <span class="vs-toggle-dot" style="background:#14817b"></span> Normal Vision
+          </button>
+          <button type="button" class="vs-toggle-btn" data-mode="protanopia" aria-pressed="false">
+            <span class="vs-toggle-dot" style="background:#c0392b"></span> Protanopia
+          </button>
+          <button type="button" class="vs-toggle-btn" data-mode="deuteranopia" aria-pressed="false">
+            <span class="vs-toggle-dot" style="background:#b8650b"></span> Deuteranopia
+          </button>
+          <button type="button" class="vs-toggle-btn" data-mode="tritanopia" aria-pressed="false">
+            <span class="vs-toggle-dot" style="background:#1a5fb4"></span> Tritanopia
+          </button>
+          <button type="button" class="vs-toggle-btn" data-mode="lowvision" aria-pressed="false">
+            <span class="vs-toggle-dot" style="background:#8e7336"></span> Low Vision
+          </button>
+          <button type="button" class="vs-toggle-btn" data-mode="monochrome" aria-pressed="false">
+            <span class="vs-toggle-dot" style="background:#4a4a4a"></span> Monochromacy
+          </button>
+        </div>
+
+        <div class="vs-frame-wrap">
+          <iframe id="vsFrame" class="vs-frame" title="Vision-simulated preview of the scanned website"></iframe>
+          <span class="vs-frame-badge" id="vsFrameBadge">Normal Vision</span>
+        </div>
+
+        <div class="vs-note">
+          <span aria-hidden="true">💡</span>
+          <span>This is a CSS-based approximation for awareness purposes — it's a helpful guide, not a clinically exact simulation.</span>
+        </div>
+      </div>
+
+      <div class="no-scan-state reveal" id="noScanState" hidden>
+        <div class="big-icon">🔍</div>
+        <h2>No scan preview available</h2>
+        <p>Run a scan first — the Vision Simulator reuses the same live preview as "Go to Element".</p>
+        <a href="index.html" class="btn-primary">Scan a website</a>
+      </div>
+
+      <div class="cta-banner reveal">
+        <div>
+          <h3>Found a contrast problem?</h3>
+          <p>Check the Critical and Warnings lists — color contrast issues are flagged automatically.</p>
+        </div>
+        <a href="critical-issues.html" class="btn-primary">View Critical Issues →</a>
+      </div>
+
+    </div>
+  </main>
+
+  <button type="button" class="fab-top" id="fabTop" aria-label="Scroll to top">↑</button>
+
+  <script src="js/subpage-common.js"></script>
+  <script src="js/vision-simulator.js"></script>
+</body>
+</html>

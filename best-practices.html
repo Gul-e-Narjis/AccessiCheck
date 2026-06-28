@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Best Practices | AccessiCheck</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header>
+    <div class="logo">AccessiCheck</div>
+    <a href="onboarding.html" class="header-link">How it works</a>
+  </header>
+
+  <nav class="subnav" aria-label="Report sections">
+    <a href="dashboard.html" class="subnav-pill">📊 Dashboard</a>
+    <a href="results.html" class="subnav-pill">📋 Full Report</a>
+    <a href="critical-issues.html" class="subnav-pill">🔴 Critical <span class="pill-count" id="navCriticalCount">–</span></a>
+    <a href="warnings.html" class="subnav-pill">🟠 Warnings <span class="pill-count" id="navWarningCount">–</span></a>
+    <a href="best-practices.html" class="subnav-pill active" aria-current="page">✅ Best Practices</a>
+    <a href="vision-simulator.html" class="subnav-pill">👁️ Vision Simulator</a>
+    <a href="settings.html" class="subnav-pill">⚙️ Settings</a>
+    <a href="about.html" class="subnav-pill">ℹ️ About</a>
+  </nav>
+
+  <main class="subpage">
+    <section class="page-hero">
+      <img src="images/best-practices-hero.jpg" alt="" class="page-hero-img" onerror="this.style.display='none'">
+      <div class="page-hero-content">
+        <span class="page-hero-eyebrow">✅ Beyond the scan</span>
+        <h1>Best Practices</h1>
+        <p>Automated scans only catch ~30-40% of real accessibility problems. These six habits cover what a scanner can't — review them once per project.</p>
+      </div>
+    </section>
+
+    <div class="subpage-body">
+
+      <h2 class="sr-only">Best practice categories</h2>
+
+      <div class="bp-progress-strip reveal">
+        <strong>Your review progress</strong>
+        <div class="bp-progress-bar"><div class="bp-progress-fill" id="bpProgressFill"></div></div>
+        <span id="bpProgressCount">0 / 6 reviewed</span>
+      </div>
+
+      <div class="bp-accordion">
+
+        <div class="bp-item reveal" data-bp-id="contrast">
+          <button type="button" class="bp-item-header" aria-expanded="false">
+            <span class="bp-item-icon" aria-hidden="true">🎨</span>
+            <span class="bp-item-title">Color &amp; Contrast</span>
+            <span class="bp-item-check">Not reviewed</span>
+            <span class="bp-item-chevron" aria-hidden="true">▾</span>
+          </button>
+          <div class="bp-item-panel">
+            <div class="bp-item-panel-inner">
+              <ul class="bp-tip-list">
+                <li>Body text should hit at least 4.5:1 contrast against its background (3:1 for large text, 18pt+).</li>
+                <li>Never use color alone to show meaning — pair red/green status with an icon or label too.</li>
+                <li>Check your links: they need to be distinguishable from body text by more than color alone (underline helps).</li>
+                <li>Test your palette in grayscale — if two elements become indistinguishable, contrast is too low.</li>
+              </ul>
+              <button type="button" class="bp-mark-done-btn">✓ Mark as reviewed</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="bp-item reveal" data-bp-id="keyboard">
+          <button type="button" class="bp-item-header" aria-expanded="false">
+            <span class="bp-item-icon" aria-hidden="true">⌨️</span>
+            <span class="bp-item-title">Keyboard Navigation</span>
+            <span class="bp-item-check">Not reviewed</span>
+            <span class="bp-item-chevron" aria-hidden="true">▾</span>
+          </button>
+          <div class="bp-item-panel">
+            <div class="bp-item-panel-inner">
+              <ul class="bp-tip-list">
+                <li>Every clickable thing should also work with Tab + Enter/Space — no mouse-only interactions.</li>
+                <li>Keep a visible focus ring on every focusable element. Never set outline: none without a replacement.</li>
+                <li>Tab order should follow the visual reading order, not the order elements happen to appear in the DOM/CSS.</li>
+                <li>Avoid keyboard traps — a user should always be able to Tab or Escape their way out of a menu or modal.</li>
+              </ul>
+              <button type="button" class="bp-mark-done-btn">✓ Mark as reviewed</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="bp-item reveal" data-bp-id="screenreader">
+          <button type="button" class="bp-item-header" aria-expanded="false">
+            <span class="bp-item-icon" aria-hidden="true">🔊</span>
+            <span class="bp-item-title">Screen Reader Support</span>
+            <span class="bp-item-check">Not reviewed</span>
+            <span class="bp-item-chevron" aria-hidden="true">▾</span>
+          </button>
+          <div class="bp-item-panel">
+            <div class="bp-item-panel-inner">
+              <ul class="bp-tip-list">
+                <li>Write alt text that describes purpose, not just appearance — "Submit order" beats "blue button".</li>
+                <li>Keep one heading hierarchy per page (h1 → h2 → h3) — don't skip levels just to get a font size.</li>
+                <li>Use ARIA only when native HTML can't do the job — a real &lt;button&gt; is better than a styled &lt;div role="button"&gt;.</li>
+                <li>Mark purely decorative images with alt="" so screen readers skip them instead of reading a filename.</li>
+              </ul>
+              <button type="button" class="bp-mark-done-btn">✓ Mark as reviewed</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="bp-item reveal" data-bp-id="forms">
+          <button type="button" class="bp-item-header" aria-expanded="false">
+            <span class="bp-item-icon" aria-hidden="true">📝</span>
+            <span class="bp-item-title">Forms &amp; Labels</span>
+            <span class="bp-item-check">Not reviewed</span>
+            <span class="bp-item-chevron" aria-hidden="true">▾</span>
+          </button>
+          <div class="bp-item-panel">
+            <div class="bp-item-panel-inner">
+              <ul class="bp-tip-list">
+                <li>Every input needs a real, associated &lt;label&gt; — placeholder text is not a substitute for a label.</li>
+                <li>Mark required fields with text, not just an asterisk or color (e.g. "Email (required)").</li>
+                <li>Error messages should say what's wrong and how to fix it, placed right next to the field.</li>
+                <li>Group related fields (like a billing address) with &lt;fieldset&gt; and &lt;legend&gt;.</li>
+              </ul>
+              <button type="button" class="bp-mark-done-btn">✓ Mark as reviewed</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="bp-item reveal" data-bp-id="media">
+          <button type="button" class="bp-item-header" aria-expanded="false">
+            <span class="bp-item-icon" aria-hidden="true">🎬</span>
+            <span class="bp-item-title">Media &amp; Motion</span>
+            <span class="bp-item-check">Not reviewed</span>
+            <span class="bp-item-chevron" aria-hidden="true">▾</span>
+          </button>
+          <div class="bp-item-panel">
+            <div class="bp-item-panel-inner">
+              <ul class="bp-tip-list">
+                <li>Provide captions for video and a transcript for audio-only content.</li>
+                <li>Never autoplay video/audio with sound — let the user start it themselves.</li>
+                <li>Respect prefers-reduced-motion — pause non-essential animation for users who request it.</li>
+                <li>Avoid content that flashes more than 3 times per second (seizure risk).</li>
+              </ul>
+              <button type="button" class="bp-mark-done-btn">✓ Mark as reviewed</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="bp-item reveal" data-bp-id="responsive">
+          <button type="button" class="bp-item-header" aria-expanded="false">
+            <span class="bp-item-icon" aria-hidden="true">📱</span>
+            <span class="bp-item-title">Responsive &amp; Zoom</span>
+            <span class="bp-item-check">Not reviewed</span>
+            <span class="bp-item-chevron" aria-hidden="true">▾</span>
+          </button>
+          <div class="bp-item-panel">
+            <div class="bp-item-panel-inner">
+              <ul class="bp-tip-list">
+                <li>Content should reflow cleanly at 200% browser zoom without horizontal scrolling.</li>
+                <li>Touch targets (buttons, links) should be at least 44×44px so they're easy to tap accurately.</li>
+                <li>Don't lock orientation — let the page work in both portrait and landscape.</li>
+                <li>Test with text-size-only zoom too (not just pinch-zoom) — some users only increase font size.</li>
+              </ul>
+              <button type="button" class="bp-mark-done-btn">✓ Mark as reviewed</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="cta-banner reveal">
+        <div>
+          <h3>Want to see this in action?</h3>
+          <p>Try the Vision Simulator to see your page the way someone with low vision or color blindness would.</p>
+        </div>
+        <a href="vision-simulator.html" class="btn-primary">Open Vision Simulator →</a>
+      </div>
+
+    </div>
+  </main>
+
+  <button type="button" class="fab-top" id="fabTop" aria-label="Scroll to top">↑</button>
+
+  <script src="js/subpage-common.js"></script>
+  <script src="js/best-practices.js"></script>
+</body>
+</html>

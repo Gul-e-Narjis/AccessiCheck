@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About &amp; Help | AccessiCheck</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header>
+    <div class="logo">AccessiCheck</div>
+    <a href="onboarding.html" class="header-link">How it works</a>
+  </header>
+
+  <nav class="subnav" aria-label="Report sections">
+    <a href="dashboard.html" class="subnav-pill">📊 Dashboard</a>
+    <a href="results.html" class="subnav-pill">📋 Full Report</a>
+    <a href="critical-issues.html" class="subnav-pill">🔴 Critical <span class="pill-count" id="navCriticalCount">–</span></a>
+    <a href="warnings.html" class="subnav-pill">🟠 Warnings <span class="pill-count" id="navWarningCount">–</span></a>
+    <a href="best-practices.html" class="subnav-pill">✅ Best Practices</a>
+    <a href="vision-simulator.html" class="subnav-pill">👁️ Vision Simulator</a>
+    <a href="settings.html" class="subnav-pill">⚙️ Settings</a>
+    <a href="about.html" class="subnav-pill active" aria-current="page">ℹ️ About</a>
+  </nav>
+
+  <main class="subpage">
+    <section class="page-hero">
+      <img src="images/about-hero.jpg" alt="" class="page-hero-img" onerror="this.style.display='none'">
+      <div class="page-hero-content">
+        <span class="page-hero-eyebrow">ℹ️ About AccessiCheck</span>
+        <h1>About &amp; Help</h1>
+        <p>A free accessibility scanner built to make the web a little more usable for everyone — students, designers, and developers alike.</p>
+      </div>
+    </section>
+
+    <div class="subpage-body">
+
+      <div class="subpage-section reveal">
+        <h2 class="subpage-section-title">How it works</h2>
+        <p class="subpage-section-sub">Three steps, no sign-up, no backend.</p>
+        <div class="about-steps">
+          <div class="about-step">
+            <div class="about-step-num">1</div>
+            <h3>Paste a URL</h3>
+            <p>Drop in any public website link from the home screen.</p>
+          </div>
+          <div class="about-step">
+            <div class="about-step-num">2</div>
+            <h3>We scan it</h3>
+            <p>axe-core — the same engine accessibility professionals use — checks the page against WCAG rules.</p>
+          </div>
+          <div class="about-step">
+            <div class="about-step-num">3</div>
+            <h3>Get a report</h3>
+            <p>See a score, prioritized issues, live fix previews, and an exportable PDF.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="subpage-section reveal">
+        <h2 class="subpage-section-title">Frequently asked questions</h2>
+        <div class="bp-accordion">
+
+          <div class="bp-item">
+            <button type="button" class="bp-item-header" aria-expanded="false">
+              <span class="bp-item-icon" aria-hidden="true">❓</span>
+              <span class="bp-item-title">Does a 100 score mean the site is fully accessible?</span>
+              <span class="bp-item-chevron" aria-hidden="true">▾</span>
+            </button>
+            <div class="bp-item-panel">
+              <div class="bp-item-panel-inner">
+                <p style="color:var(--text-light); font-size:.92rem; line-height:1.6;">Not quite — automated tools like axe-core catch roughly 30–40% of accessibility issues. A 100 score means no automatically-detectable problems were found. The Best Practices tab covers the manual checks a scanner can't do.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bp-item">
+            <button type="button" class="bp-item-header" aria-expanded="false">
+              <span class="bp-item-icon" aria-hidden="true">❓</span>
+              <span class="bp-item-title">Why can't some sites be scanned?</span>
+              <span class="bp-item-chevron" aria-hidden="true">▾</span>
+            </button>
+            <div class="bp-item-panel">
+              <div class="bp-item-panel-inner">
+                <p style="color:var(--text-light); font-size:.92rem; line-height:1.6;">Some sites block automated/cross-origin requests (CORS), need a login, or load content in ways our fetcher can't reach. AccessiCheck tries multiple proxy routes automatically before giving up.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bp-item">
+            <button type="button" class="bp-item-header" aria-expanded="false">
+              <span class="bp-item-icon" aria-hidden="true">❓</span>
+              <span class="bp-item-title">Is my scan data stored anywhere?</span>
+              <span class="bp-item-chevron" aria-hidden="true">▾</span>
+            </button>
+            <div class="bp-item-panel">
+              <div class="bp-item-panel-inner">
+                <p style="color:var(--text-light); font-size:.92rem; line-height:1.6;">Everything stays on your device. Scan results live in your browser's session for the current report, and your score history is saved in local storage on this device only — nothing is sent to a server. Clear it anytime from Settings.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bp-item">
+            <button type="button" class="bp-item-header" aria-expanded="false">
+              <span class="bp-item-icon" aria-hidden="true">❓</span>
+              <span class="bp-item-title">What's the difference between Critical and Warnings?</span>
+              <span class="bp-item-chevron" aria-hidden="true">▾</span>
+            </button>
+            <div class="bp-item-panel">
+              <div class="bp-item-panel-inner">
+                <p style="color:var(--text-light); font-size:.92rem; line-height:1.6;">Critical issues (axe-core's "critical" and "serious" impact levels) tend to block assistive technology users completely. Warnings ("moderate" impact) make things harder but usually don't block access entirely. Fix critical issues first.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="subpage-section reveal">
+        <h2 class="subpage-section-title">Credits</h2>
+        <div class="about-credits">
+          <ul>
+            <li>🔧 <span>Powered by <a href="https://www.deque.com/axe/" target="_blank" rel="noopener noreferrer">axe-core</a>, the open-source accessibility testing engine</span></li>
+            <li>📐 <span>Checks based on the <a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank" rel="noopener noreferrer">WCAG 2.1</a> guidelines</span></li>
+            <li>🎓 <span>Built as an HCI semester project — designed with accessibility-first principles throughout, including this very page</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cta-banner reveal">
+        <div>
+          <h3>New here?</h3>
+          <p>Take the 3-step onboarding tour to see how AccessiCheck works.</p>
+        </div>
+        <a href="onboarding.html" class="btn-primary">Start the Tour →</a>
+      </div>
+
+    </div>
+  </main>
+
+  <button type="button" class="fab-top" id="fabTop" aria-label="Scroll to top">↑</button>
+
+  <script src="js/subpage-common.js"></script>
+  <script src="js/about.js"></script>
+</body>
+</html>

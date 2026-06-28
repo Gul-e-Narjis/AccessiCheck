@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Warnings List | AccessiCheck</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header>
+    <div class="logo">AccessiCheck</div>
+    <a href="onboarding.html" class="header-link">How it works</a>
+  </header>
+
+  <nav class="subnav" aria-label="Report sections">
+    <a href="dashboard.html" class="subnav-pill">📊 Dashboard</a>
+    <a href="results.html" class="subnav-pill">📋 Full Report</a>
+    <a href="critical-issues.html" class="subnav-pill">🔴 Critical <span class="pill-count" id="navCriticalCount">–</span></a>
+    <a href="warnings.html" class="subnav-pill active" aria-current="page">🟠 Warnings <span class="pill-count" id="navWarningCount">–</span></a>
+    <a href="best-practices.html" class="subnav-pill">✅ Best Practices</a>
+    <a href="vision-simulator.html" class="subnav-pill">👁️ Vision Simulator</a>
+    <a href="settings.html" class="subnav-pill">⚙️ Settings</a>
+    <a href="about.html" class="subnav-pill">ℹ️ About</a>
+  </nav>
+
+  <main class="subpage">
+    <section class="page-hero">
+      <img src="images/warnings-hero.jpg" alt="" class="page-hero-img" onerror="this.style.display='none'">
+      <div class="page-hero-content">
+        <span class="page-hero-eyebrow">🟠 Severity: Moderate</span>
+        <h1>Warnings List</h1>
+        <p>These won't block most users completely, but they make the page harder to use for people with low vision, motor difficulties, or cognitive differences. Worth fixing once the critical list is clear.</p>
+      </div>
+    </section>
+
+    <div class="subpage-body">
+
+      <h2 class="sr-only">Warning list</h2>
+
+      <div class="summary-strip summary-strip--moderate reveal" id="summaryStrip">
+        <div class="summary-strip-count">
+          <span class="num" id="warningCount">0</span>
+          <span>warning(s) found</span>
+        </div>
+        <span class="summary-strip-url" id="scannedUrlTag"></span>
+      </div>
+
+      <div id="warningList"></div>
+
+      <div class="empty-state reveal" id="emptyState" hidden>
+        <div class="big-icon">👌</div>
+        <h2>No warnings here</h2>
+        <p>No moderate-severity issues on this scan. Check Best Practices for extra polish ideas.</p>
+        <a href="best-practices.html" class="btn-secondary">View Best Practices →</a>
+      </div>
+
+      <div class="no-scan-state reveal" id="noScanState" hidden>
+        <div class="big-icon">🔍</div>
+        <h2>No scan results yet</h2>
+        <p>Run a scan first, then come back here to see your warnings.</p>
+        <a href="index.html" class="btn-primary">Scan a website</a>
+      </div>
+
+      <div class="cta-banner reveal">
+        <div>
+          <h3>Want the full picture?</h3>
+          <p>Open the Full Report to see critical, moderate, and minor issues together with fixes.</p>
+        </div>
+        <a href="results.html" class="btn-primary">Open Full Report →</a>
+      </div>
+
+    </div>
+  </main>
+
+  <button type="button" class="fab-top" id="fabTop" aria-label="Scroll to top">↑</button>
+
+  <script src="js/subpage-common.js"></script>
+  <script src="js/warnings.js"></script>
+</body>
+</html>
