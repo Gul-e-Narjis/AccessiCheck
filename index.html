@@ -162,19 +162,20 @@
   // Auth header
   const user = JSON.parse(localStorage.getItem('ac_user') || 'null');
   const authSection = document.getElementById('authSection');
- if (user) {
+if (user) {
     authSection.innerHTML = `
-      <a href="history.html" class="header-link" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);padding:7px 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.25);transition:all 0.2s ease;">📋 History</a>
-      <a href="profile.html" style="display:inline-flex;align-items:center;gap:7px;background:var(--accent-coral-deep);color:white;padding:8px 16px;border-radius:999px;font-weight:700;font-size:0.88rem;text-decoration:none;transition:all 0.2s ease;">
-        <span style="width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,0.2);display:inline-flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:800;">${user.name.charAt(0).toUpperCase()}</span>
+      <a href="history.html" style="color:rgba(255,255,255,0.85);font-size:0.88rem;font-weight:500;text-decoration:none;padding:6px 14px;border-radius:6px;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">📋 History</a>
+      <div style="width:1px;height:18px;background:rgba(255,255,255,0.2);"></div>
+      <a href="profile.html" style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);color:white;padding:6px 14px 6px 6px;border-radius:999px;font-weight:600;font-size:0.88rem;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.12)'">
+        <span style="width:28px;height:28px;border-radius:50%;background:var(--teal-primary);border:2px solid rgba(255,255,255,0.4);display:inline-flex;align-items:center;justify-content:center;font-size:0.82rem;font-weight:800;color:white;">${user.name.charAt(0).toUpperCase()}</span>
         ${user.name.split(' ')[0]}
       </a>
-      <button onclick="logout()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);color:white;padding:7px 14px;border-radius:999px;font-weight:600;font-size:0.85rem;cursor:pointer;transition:all 0.2s ease;">Logout</button>
+      <button onclick="logout()" style="background:transparent;border:1px solid rgba(255,255,255,0.25);color:rgba(255,255,255,0.85);padding:6px 14px;border-radius:6px;font-weight:500;font-size:0.85rem;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Logout</button>
     `;
   } else {
     authSection.innerHTML = `
-      <a href="login.html" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);color:white;padding:7px 16px;border-radius:999px;font-weight:600;font-size:0.88rem;text-decoration:none;border:1px solid rgba(255,255,255,0.25);">Login</a>
-      <a href="register.html" style="display:inline-flex;align-items:center;gap:6px;background:var(--accent-coral-deep);color:white;padding:8px 16px;border-radius:999px;font-weight:700;font-size:0.88rem;text-decoration:none;">Get Started →</a>
+      <a href="login.html" style="color:rgba(255,255,255,0.85);font-size:0.88rem;font-weight:500;text-decoration:none;padding:6px 14px;border-radius:6px;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Login</a>
+      <a href="register.html" style="background:var(--accent-coral-deep);color:white;font-size:0.88rem;font-weight:700;text-decoration:none;padding:8px 18px;border-radius:8px;transition:all 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">Get Started →</a>
     `;
   }
   function logout() {
