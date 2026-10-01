@@ -2,6 +2,7 @@ const url = sessionStorage.getItem('scanUrl');
 document.getElementById('scanningUrl').textContent = url || '';
 
 const PROXIES = [
+  (u) => `https://accessicheck-backend.vercel.app/api/fetch-page?url=${encodeURIComponent(u)}`,
   (u) => `https://api.codetabs.com/v1/proxy?quest=${u}`,
   (u) => `https://corsproxy.io/?url=${encodeURIComponent(u)}`,
   (u) => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
