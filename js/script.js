@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = 'https://accessicheck-backend.vercel.app/api';
 const form = document.getElementById('scanForm');
 
 form.addEventListener('submit', async function (e) {

@@ -53,7 +53,7 @@ function finishScan(error, violations, cleanHtml) {
       const minor = violations.filter(v => v.impact === 'minor' || v.impact === 'low').length;
       const score = Math.max(0, 100 - (critical * 10 + moderate * 5 + minor * 2));
 
-      fetch('http://localhost:5000/api/scan/save', {
+      fetch('https://accessicheck-backend.vercel.app/api/scan/save', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
