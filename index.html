@@ -154,7 +154,7 @@
 
   <!-- Auto-redirect to onboarding on first visit -->
   <script>
-    if (!localStorage.getItem('ob_done')) {
+    if (!sessionStorage.getItem('ob_done')) {
       window.location.replace('onboarding.html');
     }
   </script>

@@ -34,7 +34,7 @@ function render(prev) {
 
 nextBtn.addEventListener('click', () => {
   if (current === total) {
-    localStorage.setItem('ob_done', '1');
+    sessionStorage.setItem('ob_done', '1');
     window.location.href = 'index.html';
     return;
   }
@@ -54,7 +54,7 @@ dots.forEach(d => d.addEventListener('click', () => {
 }));
 
 document.getElementById('skipLink').addEventListener('click', () => {
-  localStorage.setItem('ob_done', '1');
+  sessionStorage.setItem('ob_done', '1');
 });
 
 // Keyboard arrow navigation
